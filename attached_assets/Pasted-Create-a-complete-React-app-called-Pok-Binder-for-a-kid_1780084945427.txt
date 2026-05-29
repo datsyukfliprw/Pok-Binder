@@ -1,0 +1,260 @@
+Create a complete React app called “PokéBinder” for a kid-friendly Pokémon card collection catalog.
+
+The app should be designed for use on both iPhone and Windows computers. It should work well in a mobile browser and desktop browser. Build it as a responsive React app using Vite.
+
+The goal of the app is to let a child catalog Pokémon cards they own, search a Pokémon card database, add cards to their collection, mark cards as owned or wanted, and eventually use the phone camera to help identify cards.
+
+Use a clean, colorful, kid-friendly design. The app should feel fun, bright, polished, and simple. Use rounded cards, soft shadows, large buttons, readable text, and a mobile-first layout. It should be easy for a child to use.
+
+Core features:
+
+1. Home Dashboard
+- Show the app title: PokéBinder
+- Show total owned cards
+- Show total wanted cards
+- Show total unique cards
+- Show quick buttons:
+  - Search Cards
+  - My Collection
+  - Wanted Cards
+  - Scan Card
+- Show a small “Recent Cards” section
+
+2. Search Cards Screen
+- Create a search input where the user can search for Pokémon cards by name.
+- Use the Pokémon TCG API if possible.
+- API documentation: https://docs.pokemontcg.io/
+- Use card search endpoint to search cards by name.
+- Display results in a responsive grid.
+- Each result card should show:
+  - official card image
+  - card name
+  - set name
+  - card number
+  - rarity if available
+- Each result should have buttons:
+  - Add to Owned
+  - Add to Wanted
+  - View Details
+
+3. Card Details Screen / Modal
+When the user clicks a card, show a details modal or details page with:
+- large official card image
+- name
+- set name
+- card number
+- rarity
+- artist if available
+- types if available
+- HP if available
+- market price if available from the API
+- buttons:
+  - Add to Owned
+  - Add to Wanted
+  - Close
+
+4. My Collection Screen
+- Show all owned cards.
+- Store owned cards in localStorage for now.
+- Each saved card should include:
+  - id
+  - name
+  - image URL
+  - set name
+  - card number
+  - rarity
+  - quantity
+  - condition
+  - notes
+  - date added
+- Allow the user to:
+  - increase quantity
+  - decrease quantity
+  - remove card
+  - edit condition
+  - edit notes
+- Conditions should include:
+  - Mint
+  - Near Mint
+  - Lightly Played
+  - Played
+  - Damaged
+- Add filters:
+  - search owned cards by name
+  - filter by set
+  - filter by rarity
+- Add sorting:
+  - newest first
+  - name A-Z
+  - set name
+  - quantity
+
+5. Wanted Cards Screen
+- Show all wanted cards.
+- Store wanted cards in localStorage for now.
+- Let the user remove cards from wanted.
+- Let the user move a wanted card to owned.
+- Use the same visual card style as My Collection.
+
+6. Scan Card Screen
+This feature should be included as a first working version, even if the OCR is basic.
+
+The user flow should be:
+
+Tap Scan Card
+↓
+Take picture with phone camera or upload image
+↓
+Preview the photo
+↓
+Try to extract text from the card image
+↓
+Use the extracted text to suggest possible Pokémon cards
+↓
+Show: “I think this might be…”
+↓
+User can tap:
+  - Yes, Add to Owned
+  - Search Manually
+  - Try Again
+
+Technical requirements for Scan Card:
+- Use an HTML file input that works with phone camera:
+  <input type="file" accept="image/*" capture="environment" />
+- Show image preview after selection.
+- Use Tesseract.js for browser OCR if possible.
+- Install and use tesseract.js.
+- OCR should attempt to read text from the uploaded card image.
+- Extract likely Pokémon name from OCR text.
+- Search the Pokémon TCG API using the likely name.
+- Show the top 3 possible matching cards.
+- The app should never automatically add a card without confirmation.
+- If OCR fails, show a friendly message:
+  “I couldn’t read that card yet. Try a clearer picture or search manually.”
+- Include a Search Manually button that takes the user to the Search Cards screen.
+
+7. Data Storage
+For the first version, use localStorage.
+Create helper functions for:
+- getOwnedCards()
+- saveOwnedCards()
+- addOwnedCard(card)
+- removeOwnedCard(cardId)
+- updateOwnedCard(cardId, updates)
+- getWantedCards()
+- saveWantedCards()
+- addWantedCard(card)
+- removeWantedCard(cardId)
+- moveWantedToOwned(cardId)
+
+Important:
+- If adding a card that already exists in owned cards, increase the quantity instead of duplicating it.
+- If adding a card that already exists in wanted cards, do not duplicate it.
+- Keep the app data persistent after refresh.
+
+8. App Navigation
+Use simple internal navigation.
+A full router is okay, but not required.
+The app should have a bottom navigation bar on mobile with:
+- Home
+- Search
+- Collection
+- Wanted
+- Scan
+
+On desktop, use a top nav or sidebar.
+
+9. Styling
+Use CSS modules or regular CSS.
+Do not require Tailwind unless already configured.
+Make the app visually polished.
+
+Design direction:
+- Pokémon-inspired but do not copy official branding too heavily.
+- Bright blue, yellow, red accents.
+- White cards.
+- Soft gray background.
+- Rounded corners.
+- Large friendly buttons.
+- Mobile-first responsive layout.
+- Cards should look good on iPhone and desktop.
+
+10. Empty States
+Add friendly empty states:
+- No owned cards yet:
+  “Your binder is empty. Search for your first card!”
+- No wanted cards yet:
+  “No wish list cards yet. Add some cards you want to find!”
+- No search results:
+  “No cards found. Try another Pokémon name.”
+- Scan failed:
+  “I couldn’t read that card yet. Try better lighting or search manually.”
+
+11. Error Handling
+Handle:
+- API loading state
+- API errors
+- empty search
+- failed OCR
+- image upload problems
+- missing card images
+- duplicate cards
+
+12. Project Structure
+Organize the app cleanly.
+
+Suggested structure:
+
+src/
+  App.jsx
+  main.jsx
+  styles.css
+  api/
+    pokemonApi.js
+  storage/
+    collectionStorage.js
+  components/
+    Header.jsx
+    BottomNav.jsx
+    CardGrid.jsx
+    PokemonCard.jsx
+    CardDetailsModal.jsx
+    StatCard.jsx
+    EmptyState.jsx
+  screens/
+    HomeScreen.jsx
+    SearchScreen.jsx
+    CollectionScreen.jsx
+    WantedScreen.jsx
+    ScanScreen.jsx
+
+13. Pokémon API
+Create a pokemonApi.js file with functions:
+- searchCardsByName(name)
+- searchCardsByText(text)
+- getCardById(id), if useful
+
+Use fetch.
+Keep API logic separate from UI components.
+If the API requires an API key, make the app still work without one if possible, but include comments showing where an API key would go.
+
+14. PWA-ready
+Make the app easy to turn into a PWA later.
+Use responsive layout.
+Use a good app-like design.
+Add a clear app title.
+Do not require server-side code for the first version.
+
+15. Final Result
+The app should run successfully with:
+npm install
+npm run dev
+
+Make sure there are no missing imports.
+Make sure the app compiles.
+Make sure localStorage works.
+Make sure search works.
+Make sure adding owned and wanted cards works.
+Make sure scan screen can take or upload a picture and attempt OCR.
+
+Build the complete working project, not just snippets.
