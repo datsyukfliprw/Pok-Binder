@@ -1,19 +1,50 @@
 import { useState, useRef } from "react";
-import { Camera, Image as ImageIcon, Loader2, Search, RotateCcw } from "lucide-react";
+import { Camera, Image as ImageIcon, Loader2, Search, RotateCcw, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Tesseract from "tesseract.js";
 import { searchCardsByText, PokemonCard } from "@/api/pokemonApi";
 import { CardDetailsModal } from "@/components/cards/CardDetailsModal";
 import { Link } from "wouter";
+import { addOwnedCard, addWantedCard } from "@/storage/collectionStorage";
+import { useToast } from "@/hooks/use-toast";
+
+const extractCandidates = (text: string): string[] => {
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+  const candidates: string[] = [];
+
+  // 1. Word immediately before "HP" on same line: "Pikachu 60HP" → "Pikachu"
+  for (const line of lines) {
+    const hpMatch = line.match(/([A-Z][a-zA-Z\-]+)\s+\d+\s*HP/i);
+    if (hpMatch) candidates.push(hpMatch[1]);
+  }
+
+  // 2. First capitalized word/phrase in first 3 lines (likely name near card top)
+  for (const line of lines.slice(0, 3)) {
+    const match = line.match(/^([A-Z][a-zA-Z\-]+(?:\s+[A-Z][a-zA-Z\-]+)?)/);
+    if (match && match[1].length >= 3) candidates.push(match[1].split(' ')[0]);
+  }
+
+  // 3. All capitalized words 3+ chars
+  const capitalWords = text.match(/\b[A-Z][a-z]{2,}\b/g) || [];
+  candidates.push(...capitalWords.slice(0, 5));
+
+  // Deduplicate and filter noise words
+  const noiseWords = new Set(['The','And','For','Set','Card','Basic','Stage','Level',
+    'Energy','Trainer','Supporter','Item','Stadium','Pokemon','Attack','Ability',
+    'Retreat','Weakness','Resistance','Damage','Counter','Special','Rule']);
+  return [...new Set(candidates)].filter(c => !noiseWords.has(c) && c.length >= 3);
+};
 
 export default function ScanScreen() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'scanning' | 'searching' | 'success' | 'error'>('idle');
+  const [currentCandidate, setCurrentCandidate] = useState<string>('');
   const [results, setResults] = useState<PokemonCard[]>([]);
   const [selectedCard, setSelectedCard] = useState<PokemonCard | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,26 +64,42 @@ export default function ScanScreen() {
     setStatus('scanning');
     try {
       const { data: { text } } = await Tesseract.recognize(imagePreview, 'eng', {
-        logger: m => console.log(m)
+        logger: () => {}
       });
       
-      // Basic heuristic: find capitalized words that might be a name
-      // Pokemon names are usually at the top, bold. OCR is messy.
-      const lines = text.split('\n').filter(l => l.trim().length > 2);
-      const possibleName = lines.find(l => /^[A-Z]/.test(l.trim())) || text.split(' ')[0] || "Unknown";
+      const candidates = extractCandidates(text);
       
-      // Clean up string
-      const cleanName = possibleName.replace(/[^a-zA-Z\s-]/g, '').trim().split(' ')[0];
-      
-      if (!cleanName || cleanName.length < 3) {
-        throw new Error("Could not extract a clear name");
+      if (candidates.length === 0) {
+        throw new Error("Could not extract any potential names");
       }
 
+      // Check if there is a card number pattern (e.g. 025/198)
+      const numberMatch = text.match(/\b(\d{1,3})\/\d{1,3}\b/);
+      const targetCardNumber = numberMatch ? numberMatch[1] : null;
+
       setStatus('searching');
-      const cards = await searchCardsByText(cleanName);
+      let foundCards: PokemonCard[] = [];
       
-      if (cards.length > 0) {
-        setResults(cards);
+      for (const candidate of candidates) {
+        setCurrentCandidate(candidate);
+        const cards = await searchCardsByText(candidate);
+        if (cards.length > 0) {
+          if (targetCardNumber) {
+             const exactMatches = cards.filter(c => c.cardNumber.includes(targetCardNumber));
+             if (exactMatches.length > 0) {
+               foundCards = exactMatches;
+             } else {
+               foundCards = cards;
+             }
+          } else {
+            foundCards = cards;
+          }
+          break;
+        }
+      }
+      
+      if (foundCards.length > 0) {
+        setResults(foundCards.slice(0, 3));
         setStatus('success');
       } else {
         throw new Error("No cards found matching that text");
@@ -68,6 +115,32 @@ export default function ScanScreen() {
     setImagePreview(null);
     setStatus('idle');
     setResults([]);
+    setCurrentCandidate('');
+  };
+
+  const handleQuickAdd = (e: React.MouseEvent, card: PokemonCard, type: 'owned' | 'wanted') => {
+    e.stopPropagation();
+    if (type === 'owned') {
+      addOwnedCard({
+        id: card.id,
+        name: card.name,
+        imageUrl: card.imageUrl,
+        setName: card.setName,
+        cardNumber: card.cardNumber,
+        rarity: card.rarity
+      });
+      toast({ title: "Added to Collection!" });
+    } else {
+      addWantedCard({
+        id: card.id,
+        name: card.name,
+        imageUrl: card.imageUrl,
+        setName: card.setName,
+        cardNumber: card.cardNumber,
+        rarity: card.rarity
+      });
+      toast({ title: "Added to Wanted List!" });
+    }
   };
 
   return (
@@ -106,16 +179,35 @@ export default function ScanScreen() {
             {results.map(card => (
               <div 
                 key={card.id} 
-                className="bg-white rounded-xl shadow-sm border p-3 flex gap-4 cursor-pointer hover:border-primary transition-colors"
+                className="bg-white rounded-xl shadow-sm border p-3 flex flex-col gap-3 hover:border-primary transition-colors cursor-pointer"
                 onClick={() => setSelectedCard(card)}
               >
-                <div className="w-20 rounded-md overflow-hidden bg-gray-50 flex-shrink-0">
-                  <img src={card.imageUrl} alt={card.name} className="w-full" loading="lazy" />
+                <div className="flex gap-4">
+                  <div className="w-20 rounded-md overflow-hidden bg-gray-50 flex-shrink-0">
+                    <img src={card.imageUrl} alt={card.name} className="w-full" loading="lazy" />
+                  </div>
+                  <div className="flex flex-col justify-center flex-1">
+                    <h3 className="font-bold text-lg leading-tight">{card.name}</h3>
+                    <p className="text-sm text-muted-foreground">{card.setName}</p>
+                    <p className="text-xs text-muted-foreground mt-1">#{card.cardNumber} • {card.rarity}</p>
+                  </div>
                 </div>
-                <div className="flex flex-col justify-center">
-                  <h3 className="font-bold text-lg leading-tight">{card.name}</h3>
-                  <p className="text-sm text-muted-foreground">{card.setName}</p>
-                  <p className="text-xs text-muted-foreground mt-1">#{card.cardNumber} • {card.rarity}</p>
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    className="flex-1 h-10 font-bold text-xs btn-touch" 
+                    onClick={(e) => handleQuickAdd(e, card, 'owned')}
+                  >
+                    <Plus className="w-3 h-3 mr-1" /> Have
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1 h-10 font-bold text-xs btn-touch"
+                    onClick={(e) => handleQuickAdd(e, card, 'wanted')}
+                  >
+                    <Plus className="w-3 h-3 mr-1" /> Want
+                  </Button>
                 </div>
               </div>
             ))}
@@ -137,13 +229,16 @@ export default function ScanScreen() {
                 <p className="font-bold text-lg animate-pulse">
                   {status === 'scanning' ? "Reading card text..." : "Searching database..."}
                 </p>
+                {status === 'searching' && currentCandidate && (
+                  <p className="text-sm mt-2 text-primary-foreground/80">Looking for: {currentCandidate}</p>
+                )}
               </div>
             )}
           </div>
 
           {status === 'error' && (
             <div className="bg-destructive/10 text-destructive p-4 rounded-xl text-center space-y-2">
-              <p className="font-bold">I couldn't read that card clearly.</p>
+              <p className="font-bold">I couldn't identify that card clearly.</p>
               <p className="text-sm">Try a clearer picture without glare, or search manually.</p>
             </div>
           )}

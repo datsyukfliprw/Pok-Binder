@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, Search, BookOpen, Star, Camera } from "lucide-react";
+import { Home, Search, BookOpen, Star, Camera, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { path: "/collection", label: "Collection", icon: BookOpen },
   { path: "/wanted", label: "Wanted", icon: Star },
   { path: "/scan", label: "Scan", icon: Camera },
+  { path: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function TopNav() {
@@ -54,8 +55,8 @@ export function BottomNav() {
   const [location] = useLocation();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-      <div className="flex justify-around items-center h-16 px-2">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t pb-safe shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] env-safe-bottom">
+      <div className="flex justify-around items-center h-[72px] px-1">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = location === item.path;
@@ -63,13 +64,15 @@ export function BottomNav() {
             <Link
               key={item.path}
               href={item.path}
-              className={cn(
-                "flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-primary/80"
-              )}
+              className="flex flex-col items-center justify-center w-full h-full transition-colors"
             >
-              <Icon className={cn("w-6 h-6", isActive ? "fill-primary/20" : "")} />
-              <span className="text-[10px] font-semibold">{item.label}</span>
+              <div className={cn(
+                "flex flex-col items-center justify-center py-1.5 px-2 rounded-xl w-full",
+                isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-primary/80"
+              )}>
+                <Icon className={cn("w-6 h-6 mb-1", isActive ? "fill-primary/20" : "")} />
+                <span className="text-[9px] sm:text-[10px] font-bold tracking-tight">{item.label}</span>
+              </div>
             </Link>
           );
         })}

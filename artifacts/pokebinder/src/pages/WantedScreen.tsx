@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Search, Star, ArrowRight, Trash2 } from "lucide-react";
+import { Search, Star, ArrowRight, Trash2, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getWantedCards, moveWantedToOwned, removeWantedCard, WantedCard } from "@/storage/collectionStorage";
@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function WantedScreen() {
   const [cards, setCards] = useState<WantedCard[]>([]);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -28,10 +29,9 @@ export default function WantedScreen() {
   };
 
   const handleRemove = (id: string) => {
-    if (confirm("Remove this card from your wanted list?")) {
-      removeWantedCard(id);
-      loadCards();
-    }
+    removeWantedCard(id);
+    loadCards();
+    setConfirmDeleteId(null);
   };
 
   return (
@@ -55,7 +55,7 @@ export default function WantedScreen() {
             Keep track of the cards you're hunting for.
           </p>
           <Link href="/search">
-            <Button size="lg" className="rounded-full px-8 font-bold h-14 bg-amber-500 hover:bg-amber-600 text-white">
+            <Button size="lg" className="rounded-full px-8 font-bold h-14 bg-amber-500 hover:bg-amber-600 text-white btn-touch">
               <Search className="w-5 h-5 mr-2" /> Find Cards to Wish For
             </Button>
           </Link>
@@ -82,19 +82,41 @@ export default function WantedScreen() {
                 <div className="mt-auto flex flex-col gap-2">
                   <Button 
                     size="sm" 
-                    className="w-full h-9 font-bold text-xs bg-amber-500 hover:bg-amber-600 text-white"
+                    className="w-full h-10 font-bold text-xs bg-amber-500 hover:bg-amber-600 text-white btn-touch"
                     onClick={() => handleMoveToOwned(card.id, card.name)}
                   >
                     Got it! <ArrowRight className="w-3 h-3 ml-1" />
                   </Button>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    className="w-full h-8 text-xs text-muted-foreground hover:text-red-600 hover:bg-red-50"
-                    onClick={() => handleRemove(card.id)}
-                  >
-                    <Trash2 className="w-3 h-3 mr-1" /> Remove
-                  </Button>
+                  
+                  {confirmDeleteId === card.id ? (
+                    <div className="flex gap-1 h-10 animate-in fade-in">
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        className="flex-1 font-bold text-xs btn-touch"
+                        onClick={() => handleRemove(card.id)}
+                      >
+                        <Check className="w-3 h-3 mr-1" /> Yes
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1 font-bold text-xs btn-touch"
+                        onClick={() => setConfirmDeleteId(null)}
+                      >
+                        <X className="w-3 h-3 mr-1" /> No
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="w-full h-10 text-xs text-muted-foreground hover:text-red-600 hover:bg-red-50 btn-touch"
+                      onClick={() => setConfirmDeleteId(card.id)}
+                    >
+                      <Trash2 className="w-3 h-3 mr-1" /> Remove
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

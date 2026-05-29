@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Search, BookOpen, Star, Camera } from "lucide-react";
+import { Search, BookOpen, Star, Camera, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getOwnedCards, getWantedCards, OwnedCard } from "@/storage/collectionStorage";
@@ -53,44 +53,44 @@ export default function HomeScreen() {
         <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-md border-0">
           <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
             <p className="text-sm font-semibold opacity-90 uppercase tracking-wider mb-1">Total</p>
-            <p className="text-3xl font-black">{stats.owned}</p>
+            <p className="text-4xl sm:text-5xl font-black">{stats.owned}</p>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-amber-400 to-amber-500 text-amber-950 shadow-md border-0">
           <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
             <p className="text-sm font-semibold opacity-90 uppercase tracking-wider mb-1">Unique</p>
-            <p className="text-3xl font-black">{stats.unique}</p>
+            <p className="text-4xl sm:text-5xl font-black">{stats.unique}</p>
           </CardContent>
         </Card>
         <Card className="bg-gradient-to-br from-rose-400 to-rose-500 text-white shadow-md border-0">
           <CardContent className="p-4 flex flex-col items-center justify-center text-center h-full">
             <p className="text-sm font-semibold opacity-90 uppercase tracking-wider mb-1">Wanted</p>
-            <p className="text-3xl font-black">{stats.wanted}</p>
+            <p className="text-4xl sm:text-5xl font-black">{stats.wanted}</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <Link href="/search">
-          <Button variant="outline" className="w-full h-24 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all">
+          <Button variant="outline" className="w-full min-h-[80px] h-auto py-4 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all btn-touch">
             <Search className="w-8 h-8 text-primary" />
             <span className="font-bold text-base">Search Cards</span>
           </Button>
         </Link>
         <Link href="/collection">
-          <Button variant="outline" className="w-full h-24 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all">
+          <Button variant="outline" className="w-full min-h-[80px] h-auto py-4 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all btn-touch">
             <BookOpen className="w-8 h-8 text-primary" />
             <span className="font-bold text-base">My Collection</span>
           </Button>
         </Link>
         <Link href="/wanted">
-          <Button variant="outline" className="w-full h-24 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all">
+          <Button variant="outline" className="w-full min-h-[80px] h-auto py-4 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all btn-touch">
             <Star className="w-8 h-8 text-amber-500" />
             <span className="font-bold text-base">Wanted List</span>
           </Button>
         </Link>
         <Link href="/scan">
-          <Button variant="outline" className="w-full h-24 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all">
+          <Button variant="outline" className="w-full min-h-[80px] h-auto py-4 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all btn-touch">
             <Camera className="w-8 h-8 text-emerald-500" />
             <span className="font-bold text-base">Scan Card</span>
           </Button>
@@ -99,7 +99,7 @@ export default function HomeScreen() {
 
       <div>
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <SparklesIcon /> Recently Added
+          <Sparkles className="text-amber-500 w-6 h-6" /> Recently Added
         </h2>
         
         {recentCards.length > 0 ? (
@@ -127,36 +127,12 @@ export default function HomeScreen() {
               <p className="font-medium">No cards yet!</p>
               <p className="text-sm mt-1 mb-4">Start your collection by searching or scanning cards.</p>
               <Link href="/search">
-                <Button>Find Cards</Button>
+                <Button className="btn-touch">Find Cards</Button>
               </Link>
             </CardContent>
           </Card>
         )}
       </div>
     </div>
-  );
-}
-
-function SparklesIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="text-amber-500"
-    >
-      <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-      <path d="M5 3v4" />
-      <path d="M19 17v4" />
-      <path d="M3 5h4" />
-      <path d="M17 19h4" />
-    </svg>
   );
 }

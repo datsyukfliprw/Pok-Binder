@@ -107,3 +107,22 @@ export function moveWantedToOwned(id: string): void {
     addOwnedCard(card);
   }
 }
+
+export function clearAllData(): void {
+  localStorage.removeItem(OWNED_KEY);
+  localStorage.removeItem(WANTED_KEY);
+  window.dispatchEvent(new Event('storage-update'));
+}
+
+export function importCollection(data: { owned?: OwnedCard[], wanted?: WantedCard[] }): void {
+  if (data.owned) saveOwnedCards(data.owned);
+  if (data.wanted) saveWantedCards(data.wanted);
+}
+
+export function getFullCollection() {
+  return {
+    owned: getOwnedCards(),
+    wanted: getWantedCards(),
+    exportedAt: new Date().toISOString()
+  };
+}

@@ -8,6 +8,7 @@ import SearchScreen from "@/pages/SearchScreen";
 import CollectionScreen from "@/pages/CollectionScreen";
 import WantedScreen from "@/pages/WantedScreen";
 import ScanScreen from "@/pages/ScanScreen";
+import SettingsScreen from "@/pages/SettingsScreen";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/collection" component={CollectionScreen} />
       <Route path="/wanted" component={WantedScreen} />
       <Route path="/scan" component={ScanScreen} />
+      <Route path="/settings" component={SettingsScreen} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -133,3 +133,11 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+.btn-touch {
+  min-height: 44px;
+}
+
+.env-safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}

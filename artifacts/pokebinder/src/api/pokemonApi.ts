@@ -31,6 +31,21 @@ export async function searchCardsByName(name: string): Promise<PokemonCard[]> {
   }
 }
 
+export async function searchCardsByBroadName(name: string): Promise<PokemonCard[]> {
+  if (!name.trim()) return [];
+  
+  try {
+    const res = await fetch(`${API_BASE}/cards?q=name:${name}&pageSize=20`, { headers: HEADERS });
+    if (!res.ok) throw new Error('Failed to fetch cards');
+    
+    const data = await res.json();
+    return data.data.map(mapCardData);
+  } catch (error) {
+    console.error('API Error:', error);
+    throw error;
+  }
+}
+
 export async function searchCardsByText(text: string): Promise<PokemonCard[]> {
   if (!text.trim()) return [];
   

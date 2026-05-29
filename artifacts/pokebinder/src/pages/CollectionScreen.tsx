@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Search, Plus, Minus, Trash2, Edit2, ChevronDown, Filter, BookOpen } from "lucide-react";
+import { Search, Plus, Minus, Trash2, Edit2, ChevronDown, Filter, BookOpen, Check, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getOwnedCards, updateOwnedCard, removeOwnedCard, OwnedCard } from "@/storage/collectionStorage";
 import {
@@ -21,6 +22,9 @@ export default function CollectionScreen() {
   const [cards, setCards] = useState<OwnedCard[]>([]);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("newest");
+  const [setFilter, setSetFilter] = useState("all");
+  const [rarityFilter, setRarityFilter] = useState("all");
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     loadCards();
@@ -33,10 +37,7 @@ export default function CollectionScreen() {
   const handleQuantity = (id: string, current: number, change: number) => {
     const newQuantity = current + change;
     if (newQuantity <= 0) {
-      if (confirm("Remove this card from your collection?")) {
-        removeOwnedCard(id);
-        loadCards();
-      }
+      setConfirmDeleteId(id);
     } else {
       updateOwnedCard(id, { quantity: newQuantity });
       loadCards();
@@ -48,18 +49,28 @@ export default function CollectionScreen() {
     loadCards();
   };
 
-  const handleRemove = (id: string) => {
-    if (confirm("Are you sure you want to remove this card completely?")) {
-      removeOwnedCard(id);
-      loadCards();
-    }
+  const handleNotesChange = (id: string, notes: string) => {
+    updateOwnedCard(id, { notes });
+    loadCards();
   };
 
+  const handleRemove = (id: string) => {
+    removeOwnedCard(id);
+    loadCards();
+    setConfirmDeleteId(null);
+  };
+
+  const uniqueSets = [...new Set(cards.map(c => c.setName))].sort();
+  const uniqueRarities = [...new Set(cards.map(c => c.rarity))].sort();
+
   // Filter and sort
-  const filteredCards = cards.filter(card => 
-    card.name.toLowerCase().includes(search.toLowerCase()) || 
-    card.setName.toLowerCase().includes(search.toLowerCase())
-  ).sort((a, b) => {
+  const filteredCards = cards.filter(card => {
+    const matchesSearch = card.name.toLowerCase().includes(search.toLowerCase()) || 
+                          card.setName.toLowerCase().includes(search.toLowerCase());
+    const matchesSet = setFilter === "all" || card.setName === setFilter;
+    const matchesRarity = rarityFilter === "all" || card.rarity === rarityFilter;
+    return matchesSearch && matchesSet && matchesRarity;
+  }).sort((a, b) => {
     switch (sortBy) {
       case "newest": return new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime();
       case "name": return a.name.localeCompare(b.name);
@@ -89,17 +100,37 @@ export default function CollectionScreen() {
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full sm:w-[160px] bg-white">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest First</SelectItem>
-              <SelectItem value="name">Name (A-Z)</SelectItem>
-              <SelectItem value="set">By Set</SelectItem>
-              <SelectItem value="qty">By Quantity</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex gap-2">
+            <Select value={setFilter} onValueChange={setSetFilter}>
+              <SelectTrigger className="w-[120px] bg-white">
+                <SelectValue placeholder="Sets" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Sets</SelectItem>
+                {uniqueSets.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={rarityFilter} onValueChange={setRarityFilter}>
+              <SelectTrigger className="w-[120px] bg-white">
+                <SelectValue placeholder="Rarity" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Rarities</SelectItem>
+                {uniqueRarities.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-[140px] bg-white">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest</SelectItem>
+                <SelectItem value="name">Name</SelectItem>
+                <SelectItem value="set">Set</SelectItem>
+                <SelectItem value="qty">Quantity</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -125,7 +156,7 @@ export default function CollectionScreen() {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-8">
           {filteredCards.map(card => (
-            <div key={card.id} className="bg-white rounded-xl shadow-sm border p-3 flex flex-col">
+            <div key={card.id} className="bg-white rounded-xl shadow-sm border p-4 flex flex-col">
               <div className="relative aspect-[63/88] rounded-lg overflow-hidden bg-gray-50 mb-3 group">
                 <img 
                   src={card.imageUrl} 
@@ -146,10 +177,10 @@ export default function CollectionScreen() {
                   {card.setName}
                 </p>
 
-                <div className="mt-auto space-y-2">
+                <div className="mt-auto space-y-3">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="w-full h-8 text-xs font-semibold justify-between bg-gray-50 border-gray-200">
+                      <Button variant="outline" size="sm" className="w-full h-10 text-xs font-semibold justify-between bg-gray-50 border-gray-200 btn-touch">
                         {card.condition}
                         <ChevronDown className="w-3 h-3 opacity-50" />
                       </Button>
@@ -169,35 +200,66 @@ export default function CollectionScreen() {
                     </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <div className="flex items-center gap-1">
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="h-8 w-8 shrink-0 rounded-l-lg rounded-r-none border-r-0"
-                      onClick={() => handleQuantity(card.id, card.quantity, -1)}
-                    >
-                      <Minus className="w-3 h-3" />
-                    </Button>
-                    <div className="h-8 flex-1 flex items-center justify-center font-bold text-sm border-y border-input bg-gray-50">
-                      {card.quantity}
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
-                      className="h-8 w-8 shrink-0 rounded-r-lg rounded-l-none border-l-0"
-                      onClick={() => handleQuantity(card.id, card.quantity, 1)}
-                    >
-                      <Plus className="w-3 h-3" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 ml-1 shrink-0 text-red-500 hover:text-red-600 hover:bg-red-50"
-                      onClick={() => handleRemove(card.id)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                  <div className="relative group">
+                    <Textarea 
+                      defaultValue={card.notes}
+                      placeholder="Add note..."
+                      onBlur={(e) => handleNotesChange(card.id, e.target.value)}
+                      className="min-h-[40px] text-xs resize-none px-2 py-2 bg-gray-50"
+                    />
+                    {!card.notes && <Edit2 className="w-3 h-3 absolute right-2 top-3 opacity-30 group-hover:opacity-100" />}
                   </div>
+
+                  {confirmDeleteId === card.id ? (
+                    <div className="flex gap-1 h-10 animate-in fade-in">
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        className="flex-1 font-bold text-xs"
+                        onClick={() => handleRemove(card.id)}
+                      >
+                        <Check className="w-3 h-3 mr-1" /> Yes
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1 font-bold text-xs"
+                        onClick={() => setConfirmDeleteId(null)}
+                      >
+                        <X className="w-3 h-3 mr-1" /> No
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className="h-10 w-10 shrink-0 rounded-l-lg rounded-r-none border-r-0 btn-touch"
+                        onClick={() => handleQuantity(card.id, card.quantity, -1)}
+                      >
+                        <Minus className="w-3 h-3" />
+                      </Button>
+                      <div className="h-10 flex-1 flex items-center justify-center font-bold text-sm border-y border-input bg-gray-50">
+                        {card.quantity}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className="h-10 w-10 shrink-0 rounded-r-lg rounded-l-none border-l-0 btn-touch"
+                        onClick={() => handleQuantity(card.id, card.quantity, 1)}
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-10 w-10 ml-1 shrink-0 text-red-500 hover:text-red-600 hover:bg-red-50 btn-touch"
+                        onClick={() => setConfirmDeleteId(card.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
