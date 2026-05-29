@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/layout/Layout";
 import HomeScreen from "@/pages/HomeScreen";
 import SearchScreen from "@/pages/SearchScreen";
+import BrowseScreen from "@/pages/BrowseScreen";
 import CollectionScreen from "@/pages/CollectionScreen";
 import WantedScreen from "@/pages/WantedScreen";
 import ScanScreen from "@/pages/ScanScreen";
@@ -18,6 +19,7 @@ function Router() {
     <Switch>
       <Route path="/" component={HomeScreen} />
       <Route path="/search" component={SearchScreen} />
+      <Route path="/browse" component={BrowseScreen} />
       <Route path="/collection" component={CollectionScreen} />
       <Route path="/wanted" component={WantedScreen} />
       <Route path="/scan" component={ScanScreen} />

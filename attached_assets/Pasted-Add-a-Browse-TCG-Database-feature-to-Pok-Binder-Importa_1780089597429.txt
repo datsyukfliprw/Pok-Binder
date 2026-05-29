@@ -1,0 +1,80 @@
+Add a Browse TCG Database feature to PokéBinder.
+
+Important:
+- Focus only on artifacts/pokebinder.
+- Do not add a backend.
+- Do not add cloud sync.
+- Do not modify the scanner/OCR feature yet.
+- Keep localStorage for owned and wanted cards.
+- Reuse existing components and storage helpers wherever possible.
+- Make this a focused feature, not a full redesign.
+
+Feature requirements:
+
+1. Add a new Browse TCG Database button to the Home dashboard.
+
+2. Add a new Browse navigation item:
+   - Mobile bottom nav should include Browse if space allows.
+   - Desktop nav should include Browse.
+   - Route should be /browse.
+
+3. Create a BrowseScreen.tsx page.
+
+4. Update pokemonApi.ts with API helper functions if needed:
+   - getSets()
+   - getCardsBySet(setId)
+   - searchCards(query)
+   - searchCardsByName(name), if not already present
+
+5. BrowseScreen should have two main sections:
+   - Search Cards
+   - Browse by Set
+
+6. Search Cards section:
+   - User can type a Pokémon/card name.
+   - Show matching official Pokémon TCG cards.
+   - Each card result should show:
+     - official image
+     - card name
+     - set name
+     - card number
+     - rarity if available
+   - Each card should have:
+     - View Details
+     - Collected
+     - Wanted
+
+7. Browse by Set section:
+   - Fetch Pokémon TCG sets from the API.
+   - Show sets in a clean list/grid.
+   - Each set should show:
+     - set name
+     - series
+     - printed total if available
+     - release date if available
+     - set logo or symbol if available
+   - Clicking a set loads cards from that set.
+   - Display those cards in the same card grid style.
+
+8. Collected button:
+   - Add the card to owned cards using the existing localStorage helper.
+   - If already owned, increase quantity instead of duplicating.
+
+9. Wanted button:
+   - Add the card to wanted cards using the existing localStorage helper.
+   - Do not duplicate wanted cards.
+
+10. Card details:
+   - Reuse the existing CardDetails modal/page if one exists.
+   - Show official image, name, set, number, rarity, HP, types, artist, and market price if available.
+
+11. UX:
+   - Add loading states.
+   - Add friendly empty states.
+   - Add API error messages.
+   - Keep buttons large and kid-friendly.
+   - Make the screen work well on iPhone and desktop.
+
+12. Make sure these pass:
+   pnpm --filter @workspace/pokebinder typecheck
+   pnpm --filter @workspace/pokebinder build

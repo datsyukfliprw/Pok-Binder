@@ -1,13 +1,13 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Search as SearchIcon, AlertCircle, SearchX, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { searchCardsByName, searchCardsByBroadName, PokemonCard } from "@/api/pokemonApi";
 import { CardDetailsModal } from "@/components/cards/CardDetailsModal";
+import { CardGridItem } from "@/components/cards/CardGridItem";
 import { useToast } from "@/hooks/use-toast";
-import { addOwnedCard, addWantedCard } from "@/storage/collectionStorage";
+import { addOwnedCard, addWantedCard, getOwnedCards, getWantedCards } from "@/storage/collectionStorage";
 
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
@@ -17,9 +17,24 @@ export default function SearchScreen() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCard, setSelectedCard] = useState<PokemonCard | null>(null);
   const [lastQuery, setLastQuery] = useState("");
+  const [ownedIds, setOwnedIds] = useState<Set<string>>(new Set());
+  const [wantedIds, setWantedIds] = useState<Set<string>>(new Set());
   
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const loadCollectionState = () => {
+    const owned = getOwnedCards();
+    const wanted = getWantedCards();
+    setOwnedIds(new Set(owned.map(c => c.id)));
+    setWantedIds(new Set(wanted.map(c => c.id)));
+  };
+
+  useEffect(() => {
+    loadCollectionState();
+    window.addEventListener('storage-update', loadCollectionState);
+    return () => window.removeEventListener('storage-update', loadCollectionState);
+  }, []);
 
   const handleSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();

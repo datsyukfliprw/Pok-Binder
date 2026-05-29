@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Search, BookOpen, Star, Camera, Sparkles } from "lucide-react";
+import { Search, BookOpen, Star, Camera, Sparkles, Library } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getOwnedCards, getWantedCards, OwnedCard } from "@/storage/collectionStorage";
@@ -93,6 +93,12 @@ export default function HomeScreen() {
           <Button variant="outline" className="w-full min-h-[80px] h-auto py-4 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all btn-touch">
             <Camera className="w-8 h-8 text-emerald-500" />
             <span className="font-bold text-base">Scan Card</span>
+          </Button>
+        </Link>
+        <Link href="/browse">
+          <Button variant="outline" className="w-full min-h-[80px] h-auto py-4 flex flex-col gap-2 rounded-2xl border-2 hover:border-primary hover:bg-primary/5 transition-all btn-touch col-span-2">
+            <Library className="w-8 h-8 text-violet-500" />
+            <span className="font-bold text-base">Browse TCG Database</span>
           </Button>
         </Link>
       </div>
