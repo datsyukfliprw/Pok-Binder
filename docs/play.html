@@ -161,7 +161,7 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 <div><span class="small muted">Binder grading balance</span><div style="font-size:23px;font-weight:800;color:#ffe5a2">🪙 <span id="binderSummaryBalance">0</span></div></div>
 <button class="btn gold" type="button" id="manageWallet">Transfer Coins</button></div>
 </div>
-<div class="statGrid"><div class="stat"><b id="statCards">0</b><span class="small muted">Cards</span></div><div class="stat"><b id="statPacks">0</b><span class="small muted">Packs opened</span></div><div class="stat"><b id="statWorth">0</b><span class="small muted">Binder value</span></div></div><div id="binderCards" class="binderGrid"></div></div></section>
+<div class="statGrid"><div class="stat"><b id="statCards">0</b><span class="small muted">Cards</span></div><div class="stat"><b id="statPacks">0</b><span class="small muted">Packs opened</span></div><div class="stat"><b id="statWorth">0</b><span class="small muted">Binder value</span></div></div><div class="binderActions" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0"><button class="btn alt" type="button" id="sellAllCards">Sell All</button><span class="small muted">Sells unlocked cards only. Lock favorites to keep them.</span></div><div id="binderCards" class="binderGrid"></div></div></section>
 <section id="wallet" class="page hidden"><div class="panel">
 <h2>Coin Wallet</h2><p class="muted" style="margin-top:0">Choose the amount and transfer coins between your Pack Shop and Binder accounts. These are game coins, not real money.</p>
 <div class="binderWallet" aria-label="Binder grading wallet">
@@ -497,7 +497,7 @@ function openPack(){
 $('closeResult').onclick=()=>{$('overlay').classList.add('hidden');};
 $('viewResultBinder').onclick=()=>{$('overlay').classList.add('hidden');tab('binder');};
 function gradeCost(c){return Math.max(50,Math.round(c.value*.08/10)*10)}
-function renderBinder(){renderTop();$('statCards').textContent=MONEY(game.cards.length);$('statPacks').textContent=MONEY(game.opened);$('statWorth').textContent=MONEY(game.cards.reduce((a,c)=>a+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0));$('binderCards').innerHTML=game.cards.length?game.cards.map(c=>cardHtml(c)).join(''):'<div class="empty" style="grid-column:1/-1">Your binder is empty.<br>Open a pack to find your first card! 📕</div>';document.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.lock));if(!c)return;c.locked=!c.locked;persist();renderBinder();say(c.name+(c.locked?' locked. It cannot be sold.':' unlocked. You can sell it now.'))});document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{
+function renderBinder(){renderTop();const sellAllButton=$('sellAllCards');const sellableCount=game.cards.filter(c=>!c.locked).length;sellAllButton.disabled=sellableCount===0;sellAllButton.textContent=sellableCount?'Sell All ('+sellableCount+')':'Sell All';$('statCards').textContent=MONEY(game.cards.length);$('statPacks').textContent=MONEY(game.opened);$('statWorth').textContent=MONEY(game.cards.reduce((a,c)=>a+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0));$('binderCards').innerHTML=game.cards.length?game.cards.map(c=>cardHtml(c)).join(''):'<div class="empty" style="grid-column:1/-1">Your binder is empty.<br>Open a pack to find your first card! 📕</div>';document.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.lock));if(!c)return;c.locked=!c.locked;persist();renderBinder();say(c.name+(c.locked?' locked. It cannot be sold.':' unlocked. You can sell it now.'))});document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{
  const c=game.cards.find(c=>c.uid===Number(b.dataset.grade));
  if(!c)return;
  const cost=gradeCost(c);
@@ -517,6 +517,18 @@ function renderBinder(){renderTop();$('statCards').textContent=MONEY(game.cards.
  persist();renderBinder();renderPacks();
  say(c.name+' got Game Grade '+c.grade+'!');playEffect(c.grade>=9);
 });document.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>{const idx=game.cards.findIndex(c=>c.uid===Number(b.dataset.sell));if(idx<0)return;const c=game.cards[idx];if(c.locked){say('Unlock '+c.name+' before selling.');return;}const value=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));if(!confirm('Sell '+c.name+' for '+MONEY(value)+' coins? This removes it from your binder.'))return;game.coins+=value;game.cards.splice(idx,1);persist();renderBinder();say('Sold for '+MONEY(value)+' coins')});}
+// Bulk selling uses the same graded value and Shop wallet as selling one card.
+$('sellAllCards').onclick=()=>{
+ const sellable=game.cards.filter(c=>!c.locked);
+ if(!sellable.length){say('No unlocked cards to sell.');return;}
+ const total=sellable.reduce((sum,c)=>sum+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0);
+ if(!Number.isSafeInteger(total)||!Number.isSafeInteger(game.coins+total)){say('Coin total is too large for a bulk sale.');return;}
+ if(!confirm('Sell all '+sellable.length+' unlocked cards for '+MONEY(total)+' Pokécoins?\n\nLocked cards will stay in your Binder. This cannot be undone.'))return;
+ game.cards=game.cards.filter(c=>c.locked);
+ game.coins+=total;
+ persist();renderBinder();renderPacks();
+ say('Sold '+sellable.length+' cards for '+MONEY(total)+' coins. Locked cards were kept.');
+};
 function today(){return new Date().toLocaleDateString('en-CA')}
 function rewards(){const claimed=game.lastDaily===today();$('daily').disabled=claimed;$('daily').textContent=claimed?'Claimed ✓':'Claim +500'}
 $('daily').onclick=()=>{if(game.lastDaily===today())return;game.lastDaily=today();game.coins+=500;persist();renderTop();rewards();say('Daily reward: +500 coins!');playEffect(false)};
