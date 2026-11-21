@@ -121,6 +121,12 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 .walletTransfer input{flex:1 1 110px;min-width:0;border:1px solid #8186b0;border-radius:10px;padding:10px 12px;background:#0c1430;color:white;font:inherit}
 .walletTransfer button{flex:1 1 115px;min-height:43px}
 @media(max-width:390px){.binderWallet{padding:12px}.walletTransfer button{flex-basis:calc(50% - 5px)}}
+.rebirthMilestones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:270px;overflow-y:auto;margin-top:8px}
+.rebirthMilestone{padding:8px 10px;border-radius:9px;background:var(--surface2);border:1px solid var(--line);font-size:12px;min-width:0;overflow-wrap:anywhere}
+.rebirthMilestone.done{border-color:#7bc99e;opacity:.75}
+.rebirthMilestone.next{border-color:#ffd878;background:#423a2e}
+.rebirthMilestone strong{display:block;color:var(--yellow);font-size:13px}
+@media(max-width:380px){.rebirthMilestones{grid-template-columns:minmax(0,1fr)}}
 </style>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" sizes="any" href="./icons/icon.svg" type="image/svg+xml">
@@ -130,7 +136,7 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 <meta name="apple-mobile-web-app-title" content="Poké Pack Lab">
 </head><body><div class="app">
 <header class="top"><div class="brand"><div class="logo" aria-hidden="true">✦</div><div><h1>Poké Pack Lab</h1><div class="subtitle small">MILLION COIN EDITION · PRIVATE PLAY TEST</div></div></div><div class="chip">🪙 <strong id="coins">500</strong> coins</div></header>
-<nav class="tabs" aria-label="Game sections"><button class="tab active" data-tab="shop">🎁 Pack Shop</button><button class="tab" data-tab="binder">📕 Binder</button><button class="tab" data-tab="wallet">🪙 Wallet</button><button class="tab" data-tab="rewards">⭐ Rewards</button><button class="tab" data-tab="settings">⚙️ Settings</button></nav>
+<nav class="tabs" aria-label="Game sections"><button class="tab active" data-tab="shop">🎁 Pack Shop</button><button class="tab" data-tab="binder">📕 Binder</button><button class="tab" data-tab="wallet">🪙 Wallet</button><button class="tab" data-tab="rewards">⭐ Rewards</button><button class="tab" data-tab="rebirth">♻️ Rebirth</button><button class="tab" data-tab="settings">⚙️ Settings</button></nav>
 <section id="shop" class="page"><div id="previewWarning" class="previewWarning" role="status"><strong>Preview only:</strong> Your iPad Files preview can show the 21 packs, but it cannot open them. To play, return to the HTML Viewer website in Safari, choose <strong>Upload → Choose File</strong>, select this file, then tap <strong>Full screen</strong>.</div><div class="panel hero"><div><h2>Open a pack. Chase a legend.</h2><p>Start with 500 coins. Collect cards, grade your favorites, sell duplicates, and work your way up to Pack 21.</p></div><div class="heroArt">⚡🃏</div></div><div class="mainRow"><div><div class="headline"><h3>Choose a pack <span class="muted small">(21 packs)</span></h3><span class="muted small">Tap one to preview</span></div><div id="packs" class="packGrid"><button class="pack selected" style="--h:184" data-pack="0" aria-label="Pack 1, Starter, 100 coins"><span class="packIcon">🌱</span><div class="packName">Pack 1<br>Starter</div><div class="packPrice">🪙 100</div></button><button class="pack " style="--h:209" data-pack="1" aria-label="Pack 2, Forest, 150 coins"><span class="packIcon">🌿</span><div class="packName">Pack 2<br>Forest</div><div class="packPrice">🪙 150</div></button><button class="pack " style="--h:234" data-pack="2" aria-label="Pack 3, Sky, 225 coins"><span class="packIcon">☁️</span><div class="packName">Pack 3<br>Sky</div><div class="packPrice">🪙 225</div></button><button class="pack " style="--h:259" data-pack="3" aria-label="Pack 4, Ember, 320 coins"><span class="packIcon">🔥</span><div class="packName">Pack 4<br>Ember</div><div class="packPrice">🪙 320</div></button><button class="pack " style="--h:284" data-pack="4" aria-label="Pack 5, Ocean, 450 coins"><span class="packIcon">🌊</span><div class="packName">Pack 5<br>Ocean</div><div class="packPrice">🪙 450</div></button><button class="pack " style="--h:309" data-pack="5" aria-label="Pack 6, Thunder, 620 coins"><span class="packIcon">⚡</span><div class="packName">Pack 6<br>Thunder</div><div class="packPrice">🪙 620</div></button><button class="pack " style="--h:334" data-pack="6" aria-label="Pack 7, Moonlight, 850 coins"><span class="packIcon">🌙</span><div class="packName">Pack 7<br>Moonlight</div><div class="packPrice">🪙 850</div></button><button class="pack " style="--h:359" data-pack="7" aria-label="Pack 8, Crystal, 1,120 coins"><span class="packIcon">💎</span><div class="packName">Pack 8<br>Crystal</div><div class="packPrice">🪙 1,120</div></button><button class="pack " style="--h:24" data-pack="8" aria-label="Pack 9, Ancient, 1,500 coins"><span class="packIcon">🏛️</span><div class="packName">Pack 9<br>Ancient</div><div class="packPrice">🪙 1,500</div></button><button class="pack " style="--h:49" data-pack="9" aria-label="Pack 10, Aurora, 1,950 coins"><span class="packIcon">🌈</span><div class="packName">Pack 10<br>Aurora</div><div class="packPrice">🪙 1,950</div></button><button class="pack " style="--h:74" data-pack="10" aria-label="Pack 11, Dragon, 2,450 coins"><span class="packIcon">🐉</span><div class="packName">Pack 11<br>Dragon</div><div class="packPrice">🪙 2,450</div></button><button class="pack " style="--h:99" data-pack="11" aria-label="Pack 12, Cosmic, 3,050 coins"><span class="packIcon">🌌</span><div class="packName">Pack 12<br>Cosmic</div><div class="packPrice">🪙 3,050</div></button><button class="pack " style="--h:124" data-pack="12" aria-label="Pack 13, Mystic, 3,750 coins"><span class="packIcon">🔮</span><div class="packName">Pack 13<br>Mystic</div><div class="packPrice">🪙 3,750</div></button><button class="pack " style="--h:149" data-pack="13" aria-label="Pack 14, Royal, 4,600 coins"><span class="packIcon">👑</span><div class="packName">Pack 14<br>Royal</div><div class="packPrice">🪙 4,600</div></button><button class="pack " style="--h:174" data-pack="14" aria-label="Pack 15, Diamond, 5,700 coins"><span class="packIcon">💠</span><div class="packName">Pack 15<br>Diamond</div><div class="packPrice">🪙 5,700</div></button><button class="pack " style="--h:199" data-pack="15" aria-label="Pack 16, Champion, 7,100 coins"><span class="packIcon">🏆</span><div class="packName">Pack 16<br>Champion</div><div class="packPrice">🪙 7,100</div></button><button class="pack " style="--h:224" data-pack="16" aria-label="Pack 17, Master, 8,950 coins"><span class="packIcon">✨</span><div class="packName">Pack 17<br>Master</div><div class="packPrice">🪙 8,950</div></button><button class="pack " style="--h:249" data-pack="17" aria-label="Pack 18, Celestial, 11,300 coins"><span class="packIcon">🌠</span><div class="packName">Pack 18<br>Celestial</div><div class="packPrice">🪙 11,300</div></button><button class="pack " style="--h:274" data-pack="18" aria-label="Pack 19, Mythic, 14,300 coins"><span class="packIcon">🌟</span><div class="packName">Pack 19<br>Mythic</div><div class="packPrice">🪙 14,300</div></button><button class="pack " style="--h:299" data-pack="19" aria-label="Pack 20, LEGENDARY, 18,850 coins"><span class="packIcon">👑</span><div class="packName">Pack 20<br>LEGENDARY</div><div class="packPrice">🪙 18,850</div></button><button class="pack " style="--h:324" data-pack="20" aria-label="Pack 21, ULTIMATE, 500,000 coins"><span class="packIcon">🐕</span><div class="packName">Pack 21<br>ULTIMATE</div><div class="packPrice">🪙 500,000</div></button></div></div><div><div id="detail" class="panel detail"><div class="muted small">PACK 1 OF 20</div><span class="bigpack">🌱</span><h2>Starter Pack</h2><div class="price">🪙 100</div><p>Every pack gives 3 or more cards. You might pull 4, 5, or even 10!</p><button class="btn gold full" disabled>Open in the HTML Viewer to play</button><div class="note">If the packs do not respond, this file is being displayed as a preview instead of a playable game.</div></div><div class="notice"><strong>Legendary Pack 20:</strong> 0.5% Pikachu Illustrator PSA 10, 4.5% 1st Edition Holo Charizard, plus five other trophy cards. These are <strong>game odds</strong>, not real-life pull rates.</div></div></div></section>
 <section id="binder" class="page hidden"><div class="panel"><div class="panelTop"><div><h2>My Binder</h2><p class="muted" style="margin:0">Tap Lock to protect a card. Transfer coins into the Binder wallet before paying to grade a card. You can still grade locked cards.</p></div><span class="chip" id="count">0 cards</span></div><div class="binderWallet" aria-label="Binder coin balance">
 <div class="row" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
@@ -148,6 +154,18 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 </div>
 </div></section>
 <section id="rewards" class="page hidden"><div class="panel"><h2>Earn coins</h2><p class="muted">Not enough for your next pack? Get back in the game without spending real money.</p><div class="stack"><div class="feature millionFeature"><div class="left"><div class="big">💰</div><div><b>Million-coin bonus</b><div class="muted small">Get 1,000,000 game coins each tap!</div></div></div><button class="btn gold" id="millionBonus">+1,000,000</button></div><div class="feature"><div class="left"><div class="big">🎁</div><div><b>Daily login reward</b><div class="muted small">+500 coins once per day</div></div></div><button class="btn gold" id="daily">Claim</button></div><div class="feature"><div class="left"><div class="big">🗂️</div><div><b>Sort your card box</b><div class="muted small">+100 coins each time · practice mode</div></div></div><button class="btn" id="earn">Sort +100</button></div><div class="feature"><div class="left"><div class="big">🏆</div><div><b>Collect rare cards</b><div class="muted small">Find your favorite cards in the binder</div></div></div><span class="badge">Have fun!</span></div></div></div></section>
+<section id="rebirth" class="page hidden"><div class="panel">
+<h2>♻️ Rebirth</h2><p class="muted">Get enough coins and at least 2 cards to rebirth. Every new rebirth doubles the coin target. There are 50 rebirth levels.</p>
+<div class="statGrid">
+<div class="stat"><b id="rebirthLevel">0 / 50</b><span class="small muted">Rebirths completed</span></div>
+<div class="stat"><b id="rebirthTarget">1,000</b><span class="small muted">Coins needed</span></div>
+<div class="stat"><b id="rebirthCards">0 / 2</b><span class="small muted">Cards needed</span></div>
+</div>
+<div class="notice"><strong>Progress:</strong> <span id="rebirthProgress">Collect 1,000 coins and 2 cards to rebirth.</span><p style="margin:8px 0 0" class="small">Your Pack Shop and Binder coin balances both count toward your total. Moving coins between them doesn't change rebirth progress.</p></div>
+<button class="btn gold full" id="doRebirth" type="button" disabled>Rebirth 1</button>
+<p class="muted small">Rebirth starts you over with 500 Shop coins, 0 Binder coins, and an empty Binder. All cards are lost, including locked and graded cards. Your rebirth count stays saved. You will be asked to confirm.</p>
+<h3>Coin targets</h3><div id="rebirthMilestones" class="rebirthMilestones"></div>
+</div></section>
 <section id="settings" class="page hidden"><div class="panel"><h2>Game settings</h2><div class="settingRow"><div><b>Install on your phone</b><div class="small muted">iPhone/iPad: Safari Share → Add to Home Screen. Android: browser menu → Install app.</div></div><button class="btn" id="installApp">Install</button></div><div class="settingRow"><div><b>Chill lo-fi soundtrack</b><div class="small muted">Original synthesized keyboard, bass and soft beat · starts when you tap Play</div></div><button class="btn" id="music">▶ Play</button></div><div class="settingRow"><div><b>Pack sound effects</b><div class="small muted">Little chimes and a jackpot fanfare</div></div><button class="btn alt" id="sounds">On</button></div><div class="settingRow"><div><b>Restart save</b><div class="small muted">Erases your binder and coins on this device</div></div><button class="btn subtle" id="reset">Reset</button></div><div class="notice">Your progress stays in this browser's local storage. This is a stand-alone, offline HTML game, not a real-money game. Pack purchases use Shop coins; grading uses transferred Binder coins. When connected to the internet, full Pokémon trading-card scans are loaded from TCGdex. If unavailable, a fan-made illustrated card is shown instead. The backup Pokémon pictures use the public PokéAPI artwork repository when available. This fan-made demo has no affiliation with Pokémon or PSA.</div></div></section>
 <div class="footer">Unofficial fan-made game · Trading-card pictures load online when available · Fictional coins · No purchases</div></div>
 <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Pack opening result"><div class="overlayBox"><div class="sparkles">✦ ✦ ✦</div><h2 id="resultTitle" class="resultsTitle">New card!</h2><div id="resultCard"></div><p id="resultDesc" class="muted"></p><button class="btn full" id="closeResult">View Cards in Binder ✦</button></div></div><div id="toast" class="toast hidden" role="status"></div>
@@ -288,14 +306,15 @@ function preloadCardArtwork(){
 const PACK_CARD_ODDS=[{count:3,chance:50},{count:4,chance:15},{count:5,chance:30},{count:10,chance:5}];
 function packCardCount(){const roll=Math.random()*100;let cursor=0;for(const option of PACK_CARD_ODDS){cursor+=option.chance;if(roll<cursor)return option.count;}return 3;}
 const MONEY=n=>Math.round(n).toLocaleString('en-US');const $=x=>document.getElementById(x);
-const INITIAL=()=>({coins:500,binderCoins:0,cards:[],opened:0,lastDaily:'',music:false,sound:true,serial:0});
+const INITIAL=()=>({coins:500,binderCoins:0,cards:[],opened:0,rebirths:0,lastDaily:'',music:false,sound:true,serial:0});
 let game;try{const raw=localStorage.getItem('poke_pack_lab_v2');game=raw?Object.assign(INITIAL(),JSON.parse(raw)):INITIAL()}catch(e){game=INITIAL()}
 if(!Number.isSafeInteger(game.binderCoins)||game.binderCoins<0)game.binderCoins=0;
+if(!Number.isInteger(game.rebirths)||game.rebirths<0||game.rebirths>50)game.rebirths=0;
 for(const card of game.cards){if(card.id==='tederoni'||card.id==='teddy-hazel'){card.id='teddy-hazel';card.name=TEDERONI.name;card.value=TEDERONI.value;card.rarity='SECRET';}}
 let chosen=0,active='shop',audio=null,musicTimer=null,toastTimer=null;
 function persist(){try{localStorage.setItem('poke_pack_lab_v2',JSON.stringify(game))}catch(e){}}
 function say(s){$('toast').textContent=s;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2600)}
-function tab(v){active=v;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==v));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===v));if(v==='binder')renderBinder();if(v==='wallet')renderTop();if(v==='shop')renderPacks()}
+function tab(v){active=v;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==v));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===v));if(v==='binder')renderBinder();if(v==='wallet')renderTop();if(v==='rebirth')renderRebirth();if(v==='shop')renderPacks()}
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tab)));
 function renderTop(){
  $('coins').textContent=MONEY(game.coins);
@@ -303,6 +322,7 @@ function renderTop(){
  $('walletMain').textContent=MONEY(game.coins);
  $('walletBinder').textContent=MONEY(game.binderCoins);
  $('binderSummaryBalance').textContent=MONEY(game.binderCoins);
+ renderRebirth();
 }
 function moveBinderCoins(direction){
  const raw=$('walletAmount').value.trim();
@@ -361,6 +381,42 @@ function rewards(){const claimed=game.lastDaily===today();$('daily').disabled=cl
 $('daily').onclick=()=>{if(game.lastDaily===today())return;game.lastDaily=today();game.coins+=500;persist();renderTop();rewards();say('Daily reward: +500 coins!');playEffect(false)};
 $('earn').onclick=()=>{game.coins+=100;persist();renderTop();say('Card box sorted! +100 coins');playEffect(false)};
 $('millionBonus').onclick=()=>{game.coins+=1000000;persist();renderTop();renderPacks();say('+1,000,000 coins added!');playEffect(true)};
+const MAX_REBIRTHS=50;
+function rebirthGoal(level){return 1000n*(2n**BigInt(level-1));}
+function rebirthCoins(){return Math.max(0,game.coins)+Math.max(0,game.binderCoins);}
+function renderRebirth(){
+ const complete=game.rebirths>=MAX_REBIRTHS;
+ const level=Math.min(game.rebirths+1,MAX_REBIRTHS);
+ const goal=rebirthGoal(level);
+ const amount=rebirthCoins();
+ const readyCoins=amount>=Number(goal);
+ const readyCards=game.cards.length>=2;
+ $('rebirthLevel').textContent=game.rebirths+' / '+MAX_REBIRTHS;
+ $('rebirthTarget').textContent=complete?'Complete!':goal.toLocaleString('en-US');
+ $('rebirthCards').textContent=game.cards.length+' / 2';
+ $('doRebirth').disabled=complete||!readyCoins||!readyCards;
+ $('doRebirth').textContent=complete?'All 50 Rebirths Complete': 'Rebirth '+level;
+ if(complete)$('rebirthProgress').textContent='All 50 rebirth levels completed!';
+ else if(readyCoins&&readyCards)$('rebirthProgress').textContent='Ready! You have enough coins and cards to rebirth.';
+ else $('rebirthProgress').textContent='Coins: '+MONEY(amount)+' / '+goal.toLocaleString('en-US')+' · Cards: '+game.cards.length+' / 2';
+ $('rebirthMilestones').innerHTML=Array.from({length:MAX_REBIRTHS},(_,i)=>{
+ const n=i+1,cls=n<=game.rebirths?'done':n===level&&!complete?'next':'';
+ return '<div class="rebirthMilestone '+cls+'">Rebirth '+n+'<strong>'+rebirthGoal(n).toLocaleString('en-US')+' coins</strong></div>';
+ }).join('');
+}
+$('doRebirth').onclick=()=>{
+ if(game.rebirths>=MAX_REBIRTHS){say('You completed all 50 rebirths!');return;}
+ const level=game.rebirths+1,target=rebirthGoal(level);
+ if(rebirthCoins()<Number(target)||game.cards.length<2){renderRebirth();say('You need '+target.toLocaleString('en-US')+' coins and at least 2 cards.');return;}
+ const message='Rebirth '+level+'? This permanently removes ALL your cards (including locked, rare, and graded cards), resets both coin balances, and starts you over with 500 coins. Your rebirth level will be saved.';
+ if(!confirm(message))return;
+ const old=game;
+ game={...INITIAL(),rebirths:level,sound:old.sound,music:old.music};
+ // No sound continues automatically after the reset.
+ game.music=false;
+ if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
+ chosen=0;persist();renderAll();tab('rebirth');say('Rebirth '+level+' complete! Start again with 500 coins.');playEffect(true);
+};
 function renderSettings(){$('music').textContent=game.music?'⏸ Pause':'▶ Play';$('sounds').textContent=game.sound?'On':'Off'}
 function getAudio(){if(audio)return audio;const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;try{audio=new A()}catch(e){return null}return audio}
 function note(freq,t,dur,vol,type='sine'){const a=getAudio();if(!a)return;let o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t+.016);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.02)}
@@ -370,8 +426,8 @@ function musicStop(){if(musicTimer)clearInterval(musicTimer);musicTimer=null;gam
 function musicStart(){const a=getAudio();if(!a){say('This browser does not support music playback');return}a.resume().then(()=>{game.music=true;persist();renderSettings();if(musicTimer)clearInterval(musicTimer);musicBar();musicTimer=setInterval(musicBar,1600)}).catch(()=>say('Tap Play again to enable audio'))}
 $('music').onclick=()=>game.music?musicStop():musicStart();$('sounds').onclick=()=>{game.sound=!game.sound;persist();renderSettings()};
 function playEffect(win){if(!game.sound)return;const a=getAudio();if(!a)return;a.resume().then(()=>{let t=a.currentTime+.02;const tones=win?[523,659,784,1046]:[440,554,659];tones.forEach((n,i)=>note(n,t+i*(win?.12:.09),.28,.033,'triangle'))}).catch(()=>{})}
-$('reset').onclick=()=>{if(!confirm('Really erase your cards and start over with 500 coins?'))return;musicStop();game=INITIAL();persist();chosen=0;renderAll();tab('shop');say('Fresh game! You have 500 coins.')};
-function renderAll(){renderTop();renderPacks();renderBinder();rewards();renderSettings()}
+$('reset').onclick=()=>{if(!confirm('Really erase your cards, coins, and rebirth progress and start over with 500 coins?'))return;musicStop();game=INITIAL();persist();chosen=0;renderAll();tab('shop');say('Fresh game! You have 500 coins.')};
+function renderAll(){renderTop();renderPacks();renderBinder();rewards();renderSettings();renderRebirth()}
 // Autoplay is blocked in most browsers, so music is always enabled by the player's deliberate tap.
 game.music=false;const warning=document.getElementById('previewWarning');if(warning)warning.remove();renderAll();preloadCardArtwork();
 window.addEventListener('online',preloadCardArtwork);
