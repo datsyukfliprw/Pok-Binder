@@ -1,5 +1,5 @@
 /* Poké Pack Lab offline support. All game rules, coins and binder run locally. */
-const CACHE='poke-pack-lab-shell-v15';
+const CACHE='poke-pack-lab-shell-v16';
 const ART_CACHE='poke-pack-lab-art-v1';
 const SHELL=['./','./index.html','./play.html','./chat-config.js','./private-chat.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon.svg'];
 self.addEventListener('install',event=>{
@@ -17,6 +17,14 @@ self.addEventListener('fetch',event=>{
  if(req.method!=='GET')return;
  const url=new URL(req.url);
  if(url.origin===self.location.origin){
+  // Prefer the newest online HTML; fall back to the offline cache when disconnected.
+  if(req.mode==='navigate' || /\/(?:index|play)\.html$/.test(url.pathname)){
+    event.respondWith(fetch(req).then(res=>{
+      if(res.ok){const copy=res.clone();caches.open(CACHE).then(cache=>cache.put(req,copy));}
+      return res;
+    }).catch(()=>caches.match(req).then(hit=>hit||caches.match('./index.html'))));
+    return;
+  }
   event.respondWith(caches.match(req).then(hit=>hit||fetch(req).then(res=>{
     if(res.ok) {const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy));}
     return res;
