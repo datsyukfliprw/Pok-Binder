@@ -127,6 +127,19 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 .rebirthMilestone.next{border-color:#ffd878;background:#423a2e}
 .rebirthMilestone strong{display:block;color:var(--yellow);font-size:13px}
 @media(max-width:380px){.rebirthMilestones{grid-template-columns:minmax(0,1fr)}}
+
+/* Private two-person family chat: online only, Firebase-backed when configured. */
+[hidden]{display:none!important}
+.privateChatMessages{display:flex;flex-direction:column;gap:10px;height:min(50dvh,400px);min-height:150px;overflow-y:auto;overscroll-behavior:contain;padding:12px;background:#12162c;border:1px solid var(--line);border-radius:13px;margin:13px 0}
+.privateChatBubble{align-self:flex-start;max-width:85%;padding:9px 12px;border-radius:13px;background:#32395d;overflow-wrap:anywhere}
+.privateChatBubble.mine{align-self:flex-end;background:#245a55}
+.privateChatSender{font-size:11px;font-weight:800;color:#b8f3e5}
+.privateChatText{white-space:pre-wrap;font-size:14px}
+.privateChatForm{display:flex;gap:9px;align-items:stretch;flex-wrap:wrap;margin:12px 0}
+.privateChatForm label{flex:1 1 100%;font-size:13px;font-weight:700}
+.privateChatForm input{flex:1 1 140px;min-width:0;border-radius:10px;border:1px solid #8186b0;padding:11px 12px;color:white;background:#0c1430;font:inherit}
+.privateChatForm button{min-height:44px}
+.privateChatHint{background:#202947;padding:11px 14px;border-radius:10px;margin-top:12px;font-size:13px}
 </style>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" sizes="any" href="./icons/icon.svg" type="image/svg+xml">
@@ -136,7 +149,7 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 <meta name="apple-mobile-web-app-title" content="Poké Pack Lab">
 </head><body><div class="app">
 <header class="top"><div class="brand"><div class="logo" aria-hidden="true">✦</div><div><h1>Poké Pack Lab</h1><div class="subtitle small">MILLION COIN EDITION · PRIVATE PLAY TEST</div></div></div><div class="chip">🪙 <strong id="coins">500</strong> coins</div></header>
-<nav class="tabs" aria-label="Game sections"><button class="tab active" data-tab="shop">🎁 Pack Shop</button><button class="tab" data-tab="binder">📕 Binder</button><button class="tab" data-tab="wallet">🪙 Wallet</button><button class="tab" data-tab="rewards">⭐ Rewards</button><button class="tab" data-tab="rebirth">♻️ Rebirth</button><button class="tab" data-tab="settings">⚙️ Settings</button></nav>
+<nav class="tabs" aria-label="Game sections"><button class="tab active" data-tab="shop">🎁 Pack Shop</button><button class="tab" data-tab="binder">📕 Binder</button><button class="tab" data-tab="wallet">🪙 Wallet</button><button class="tab" data-tab="chat">💬 Chat</button><button class="tab" data-tab="rewards">⭐ Rewards</button><button class="tab" data-tab="rebirth">♻️ Rebirth</button><button class="tab" data-tab="settings">⚙️ Settings</button></nav>
 <section id="shop" class="page"><div id="previewWarning" class="previewWarning" role="status"><strong>Preview only:</strong> Your iPad Files preview may not show all 50 packs, but it cannot open them. To play, return to the HTML Viewer website in Safari, choose <strong>Upload → Choose File</strong>, select this file, then tap <strong>Full screen</strong>.</div><div class="panel hero"><div><h2>Open a pack. Chase a legend.</h2><p>Start with 500 coins. Collect cards, grade your favorites, sell duplicates, and work your way up to Pack 21.</p></div><div class="heroArt">⚡🃏</div></div><div class="mainRow"><div><div class="headline"><h3>Choose a pack <span class="muted small">(50 packs)</span></h3><span class="muted small">Tap one to preview</span></div><div id="packs" class="packGrid"><button class="pack selected" style="--h:184" data-pack="0" aria-label="Pack 1, Starter, 100 coins"><span class="packIcon">🌱</span><div class="packName">Pack 1<br>Starter</div><div class="packPrice">🪙 100</div></button><button class="pack " style="--h:209" data-pack="1" aria-label="Pack 2, Forest, 150 coins"><span class="packIcon">🌿</span><div class="packName">Pack 2<br>Forest</div><div class="packPrice">🪙 150</div></button><button class="pack " style="--h:234" data-pack="2" aria-label="Pack 3, Sky, 225 coins"><span class="packIcon">☁️</span><div class="packName">Pack 3<br>Sky</div><div class="packPrice">🪙 225</div></button><button class="pack " style="--h:259" data-pack="3" aria-label="Pack 4, Ember, 320 coins"><span class="packIcon">🔥</span><div class="packName">Pack 4<br>Ember</div><div class="packPrice">🪙 320</div></button><button class="pack " style="--h:284" data-pack="4" aria-label="Pack 5, Ocean, 450 coins"><span class="packIcon">🌊</span><div class="packName">Pack 5<br>Ocean</div><div class="packPrice">🪙 450</div></button><button class="pack " style="--h:309" data-pack="5" aria-label="Pack 6, Thunder, 620 coins"><span class="packIcon">⚡</span><div class="packName">Pack 6<br>Thunder</div><div class="packPrice">🪙 620</div></button><button class="pack " style="--h:334" data-pack="6" aria-label="Pack 7, Moonlight, 850 coins"><span class="packIcon">🌙</span><div class="packName">Pack 7<br>Moonlight</div><div class="packPrice">🪙 850</div></button><button class="pack " style="--h:359" data-pack="7" aria-label="Pack 8, Crystal, 1,120 coins"><span class="packIcon">💎</span><div class="packName">Pack 8<br>Crystal</div><div class="packPrice">🪙 1,120</div></button><button class="pack " style="--h:24" data-pack="8" aria-label="Pack 9, Ancient, 1,500 coins"><span class="packIcon">🏛️</span><div class="packName">Pack 9<br>Ancient</div><div class="packPrice">🪙 1,500</div></button><button class="pack " style="--h:49" data-pack="9" aria-label="Pack 10, Aurora, 1,950 coins"><span class="packIcon">🌈</span><div class="packName">Pack 10<br>Aurora</div><div class="packPrice">🪙 1,950</div></button><button class="pack " style="--h:74" data-pack="10" aria-label="Pack 11, Dragon, 2,450 coins"><span class="packIcon">🐉</span><div class="packName">Pack 11<br>Dragon</div><div class="packPrice">🪙 2,450</div></button><button class="pack " style="--h:99" data-pack="11" aria-label="Pack 12, Cosmic, 3,050 coins"><span class="packIcon">🌌</span><div class="packName">Pack 12<br>Cosmic</div><div class="packPrice">🪙 3,050</div></button><button class="pack " style="--h:124" data-pack="12" aria-label="Pack 13, Mystic, 3,750 coins"><span class="packIcon">🔮</span><div class="packName">Pack 13<br>Mystic</div><div class="packPrice">🪙 3,750</div></button><button class="pack " style="--h:149" data-pack="13" aria-label="Pack 14, Royal, 4,600 coins"><span class="packIcon">👑</span><div class="packName">Pack 14<br>Royal</div><div class="packPrice">🪙 4,600</div></button><button class="pack " style="--h:174" data-pack="14" aria-label="Pack 15, Diamond, 5,700 coins"><span class="packIcon">💠</span><div class="packName">Pack 15<br>Diamond</div><div class="packPrice">🪙 5,700</div></button><button class="pack " style="--h:199" data-pack="15" aria-label="Pack 16, Champion, 7,100 coins"><span class="packIcon">🏆</span><div class="packName">Pack 16<br>Champion</div><div class="packPrice">🪙 7,100</div></button><button class="pack " style="--h:224" data-pack="16" aria-label="Pack 17, Master, 8,950 coins"><span class="packIcon">✨</span><div class="packName">Pack 17<br>Master</div><div class="packPrice">🪙 8,950</div></button><button class="pack " style="--h:249" data-pack="17" aria-label="Pack 18, Celestial, 11,300 coins"><span class="packIcon">🌠</span><div class="packName">Pack 18<br>Celestial</div><div class="packPrice">🪙 11,300</div></button><button class="pack " style="--h:274" data-pack="18" aria-label="Pack 19, Mythic, 14,300 coins"><span class="packIcon">🌟</span><div class="packName">Pack 19<br>Mythic</div><div class="packPrice">🪙 14,300</div></button><button class="pack " style="--h:299" data-pack="19" aria-label="Pack 20, LEGENDARY, 18,850 coins"><span class="packIcon">👑</span><div class="packName">Pack 20<br>LEGENDARY</div><div class="packPrice">🪙 18,850</div></button><button class="pack " style="--h:324" data-pack="20" aria-label="Pack 21, ULTIMATE, 500,000 coins"><span class="packIcon">🐕</span><div class="packName">Pack 21<br>ULTIMATE</div><div class="packPrice">🪙 500,000</div></button></div></div><div><div id="detail" class="panel detail"><div class="muted small">PACK 1 OF 50</div><span class="bigpack">🌱</span><h2>Starter Pack</h2><div class="price">🪙 100</div><p>Every pack gives 3 or more cards. You might pull 4, 5, or even 10!</p><button class="btn gold full" disabled>Open in the HTML Viewer to play</button><div class="note">If the packs do not respond, this file is being displayed as a preview instead of a playable game.</div></div><div class="notice"><strong>Legendary Pack 20:</strong> 0.5% Pikachu Illustrator PSA 10, 4.5% 1st Edition Holo Charizard, plus five other trophy cards. These are <strong>game odds</strong>, not real-life pull rates.</div></div></div></section>
 <section id="binder" class="page hidden"><div class="panel"><div class="panelTop"><div><h2>My Binder</h2><p class="muted" style="margin:0">Tap Lock to protect a card. Transfer coins into the Binder wallet before paying to grade a card. You can still grade locked cards.</p></div><span class="chip" id="count">0 cards</span></div><div class="binderWallet" aria-label="Binder coin balance">
 <div class="row" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
@@ -152,6 +165,35 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 <div class="walletBalances"><div class="walletBalance"><span class="small muted">Pack Shop coins</span><strong id="walletMain">500</strong></div><div class="walletBalance"><span class="small muted">Binder coins</span><strong id="walletBinder">0</strong></div></div>
 <div class="walletTransfer"><label for="walletAmount">How many coins?</label><input id="walletAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="Enter amount"><button class="btn gold" id="depositBinder" type="button">Deposit into Binder</button><button class="btn alt" id="withdrawBinder" type="button">Move back to Shop</button></div>
 </div>
+</div></section>
+
+<section id="chat" class="page hidden"><div class="panel">
+<h2>Private Chat</h2>
+<p class="muted">Just you and your dad. Only the two approved accounts can send or read messages once your dad finishes the setup. Your conversation is not public.</p>
+<div id="privateChatStatus" class="notice" role="status">Loading private chat…</div>
+<div id="privateChatSetup" class="privateChatHint" hidden>
+Chat needs a one-time setup by your dad. <a href="https://github.com/datsyukfliprw/Pok-Binder/blob/main/docs/PRIVATE_CHAT_SETUP.md" target="_blank" rel="noopener noreferrer" style="color:var(--a)">Setup instructions for a parent</a>
+</div>
+<div id="privateChatLogin" hidden>
+<form id="privateChatLoginForm" class="privateChatForm">
+<label for="privateChatEmail">Account email</label>
+<input id="privateChatEmail" type="email" placeholder="Your approved chat login" autocomplete="username" required>
+<label for="privateChatPassword">Password</label>
+<input id="privateChatPassword" type="password" autocomplete="current-password" placeholder="Password" required>
+<button class="btn gold" type="submit" id="privateChatLoginButton">Sign in</button>
+</form>
+<p class="small muted">Ask your dad for your private account. Never share a login password in game messages.</p>
+</div>
+<div id="privateChatRoom" hidden>
+<div id="privateChatMessages" class="privateChatMessages" aria-label="Private chat messages" aria-live="polite"></div>
+<form class="privateChatForm" id="privateChatSendForm">
+<label for="privateChatInput">Message</label>
+<input id="privateChatInput" type="text" maxlength="500" placeholder="Say something…" autocomplete="off" required>
+<button id="privateChatSendButton" type="submit" class="btn gold">Send</button>
+</form>
+<button id="privateChatLogout" type="button" class="btn alt sm">Sign out</button>
+</div>
+<p class="small muted">Messages need internet. Packs, binder and coin transfers still work without chat.</p>
 </div></section>
 <section id="rewards" class="page hidden"><div class="panel"><h2>Earn coins</h2><p class="muted">Not enough for your next pack? Get back in the game without spending real money.</p><div class="stack"><div class="feature millionFeature"><div class="left"><div class="big">💰</div><div><b>Million-coin bonus</b><div class="muted small">Get 1,000,000 game coins each tap!</div></div></div><button class="btn gold" id="millionBonus">+1,000,000</button></div><div class="feature"><div class="left"><div class="big">🎁</div><div><b>Daily login reward</b><div class="muted small">+500 coins once per day</div></div></div><button class="btn gold" id="daily">Claim</button></div><div class="feature"><div class="left"><div class="big">🗂️</div><div><b>Sort your card box</b><div class="muted small">+100 coins each time · practice mode</div></div></div><button class="btn" id="earn">Sort +100</button></div><div class="feature"><div class="left"><div class="big">🏆</div><div><b>Collect rare cards</b><div class="muted small">Find your favorite cards in the binder</div></div></div><span class="badge">Have fun!</span></div></div></div></section>
 <section id="rebirth" class="page hidden"><div class="panel">
@@ -457,4 +499,4 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 }
 })();
-</script></body></html>
+</script><script src="./chat-config.js"></script><script type="module" src="./private-chat.js"></script></body></html>
