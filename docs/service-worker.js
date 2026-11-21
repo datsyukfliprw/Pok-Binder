@@ -1,5 +1,5 @@
 /* Poké Pack Lab offline support. All game rules, coins and binder run locally. */
-const CACHE='poke-pack-lab-shell-v2';
+const CACHE='poke-pack-lab-shell-v3';
 const ART_CACHE='poke-pack-lab-art-v1';
 const SHELL=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon.svg'];
 self.addEventListener('install',event=>{
