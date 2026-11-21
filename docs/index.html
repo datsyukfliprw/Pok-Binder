@@ -120,6 +120,8 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 .walletTransfer label{flex-basis:100%;font-size:13px;font-weight:700}
 .walletTransfer input{flex:1 1 110px;min-width:0;border:1px solid #8186b0;border-radius:10px;padding:10px 12px;background:#0c1430;color:white;font:inherit}
 .walletTransfer button{flex:1 1 115px;min-height:43px}
+.walletQuick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.walletQuick button{flex:1 1 110px;min-height:43px}
 @media(max-width:390px){.binderWallet{padding:12px}.walletTransfer button{flex-basis:calc(50% - 5px)}}
 .rebirthMilestones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:270px;overflow-y:auto;margin-top:8px}
 .rebirthMilestone{padding:8px 10px;border-radius:9px;background:var(--surface2);border:1px solid var(--line);font-size:12px;min-width:0;overflow-wrap:anywhere}
@@ -166,7 +168,7 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 <h3>🪙 Binder Grading Wallet</h3>
 <p class="muted small" style="margin:0">Move game coins from your Pack Shop wallet into your Binder. Only Binder coins can pay for grading. You can transfer them back anytime.</p>
 <div class="walletBalances"><div class="walletBalance"><span class="small muted">Pack Shop coins</span><strong id="walletMain">500</strong></div><div class="walletBalance"><span class="small muted">Binder coins</span><strong id="walletBinder">0</strong></div></div>
-<div class="walletTransfer"><label for="walletAmount">How many coins?</label><input id="walletAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="Enter amount"><button class="btn gold" id="depositBinder" type="button">Deposit into Binder</button><button class="btn alt" id="withdrawBinder" type="button">Move back to Shop</button></div>
+<div class="walletTransfer"><label for="walletAmount">How many coins?</label><input id="walletAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="Enter amount"><button class="btn gold" id="depositBinder" type="button">Deposit into Binder</button><button class="btn alt" id="withdrawBinder" type="button">Move back to Shop</button></div><div class="walletQuick" aria-label="Quickly add coins to Binder"><button class="btn alt" id="addBinder1000" type="button">Add 1,000</button><button class="btn alt" id="addBinder10000" type="button">Add 10,000</button><button class="btn gold" id="addBinderAll" type="button">Add All Shop Coins</button></div>
 </div>
 </div></section>
 
@@ -208,12 +210,12 @@ Chat needs a one-time setup by your dad. <a href="https://github.com/datsyukflip
 </div>
 <div class="notice"><strong>Progress:</strong> <span id="rebirthProgress">Collect 1,000 coins and 2 cards to rebirth.</span><p style="margin:8px 0 0" class="small">Your Pack Shop and Binder coin balances both count toward your total. Moving coins between them doesn't change rebirth progress.</p></div>
 <p class="muted" id="rebirthUnlock">Next reward: Unlock Pack 22 for 200,000 coins.</p><button class="btn gold full" id="doRebirth" type="button" disabled>Rebirth 1</button>
-<p class="muted small">Rebirth starts you over with 500 Shop coins, 0 Binder coins, and an empty Binder. All cards are lost, including locked and graded cards. Your rebirth count stays saved. You will be asked to confirm.</p>
+<p class="muted small">Each rebirth spends only the required coins and 2 cards. Your extra coins, remaining cards, grades, and wallet balances stay. The two lowest-value unlocked cards are used first; lock a card in your Binder to protect it. Shop coins are spent before Binder coins. You'll be asked to confirm.</p>
 <h3>Coin targets</h3><div id="rebirthMilestones" class="rebirthMilestones"></div>
 </div></section>
 <section id="settings" class="page hidden"><div class="panel"><h2>Game settings</h2><div class="settingRow"><div><b>Install on your phone</b><div class="small muted">iPhone/iPad: Safari Share → Add to Home Screen. Android: browser menu → Install app.</div></div><button class="btn" id="installApp">Install</button></div><div class="settingRow"><div><b>Chill lo-fi soundtrack</b><div class="small muted">Original synthesized keyboard, bass and soft beat · starts when you tap Play</div></div><button class="btn" id="music">▶ Play</button></div><div class="settingRow"><div><b>Pack sound effects</b><div class="small muted">Little chimes and a jackpot fanfare</div></div><button class="btn alt" id="sounds">On</button></div><div class="settingRow"><div><b>Restart save</b><div class="small muted">Erases your binder and coins on this device</div></div><button class="btn subtle" id="reset">Reset</button></div><div class="notice">Your progress stays in this browser's local storage. This is a stand-alone, offline HTML game, not a real-money game. Pack purchases use Shop coins; grading uses transferred Binder coins. When connected to the internet, full Pokémon trading-card scans are loaded from TCGdex. If unavailable, a fan-made illustrated card is shown instead. The backup Pokémon pictures use the public PokéAPI artwork repository when available. This fan-made demo has no affiliation with Pokémon or PSA.</div></div></section>
 <div class="footer">Unofficial fan-made game · Trading-card pictures load online when available · Fictional coins · No purchases</div></div>
-<div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Pack opening result"><div class="overlayBox"><div class="sparkles">✦ ✦ ✦</div><h2 id="resultTitle" class="resultsTitle">New card!</h2><div id="resultCard"></div><p id="resultDesc" class="muted"></p><button class="btn full" id="closeResult">View Cards in Binder ✦</button></div></div><div id="toast" class="toast hidden" role="status"></div>
+<div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Pack opening result"><div class="overlayBox"><div class="sparkles">✦ ✦ ✦</div><h2 id="resultTitle" class="resultsTitle">New card!</h2><div id="resultCard"></div><p id="resultDesc" class="muted"></p><button class="btn gold full" id="closeResult" type="button">Keep Opening Packs</button><button class="btn alt full" id="viewResultBinder" type="button" style="margin-top:10px">View Cards in Binder</button></div></div><div id="toast" class="toast hidden" role="status"></div>
 <script>
 (function(){'use strict';
 const BASE_PACKS=21;
@@ -354,19 +356,33 @@ function preloadCardArtwork(){
  async function worker(){while(n<keys.length){const key=keys[n++];queueImage(key);await artRequests[key];}}
  for(let i=0;i<4;i++)worker();
 }
-// Keep opening several common cards from minting far more coins than a pack costs.
-// A 100-coin starter pack now has commons worth 3-8 coins each, even on a 10-card pull.
-const CARD_VALUE_BALANCE_VERSION=2;
+// Values are a percentage of the original pack price, rather than a random multiplier.
+// Rare collectors get 25%; normal cards scale down to 10%, 5%, and 1%.
+// The secret Teddy and Hazel remains a fixed 5,000,000-coin prize.
+const CARD_VALUE_BALANCE_VERSION=3;
+function cardValuePercentage(rarity){
+ return ['GRAIL','JACKPOT','TROPHY','LEGENDARY'].includes(rarity)?.25:
+  rarity==='ULTRA'?.10:rarity==='HOLO'?.05:.01;
+}
 function newCardValue(price,rarity){
- const range=rarity==='LEGENDARY'?[.65,1.30]:rarity==='HOLO'||rarity==='ULTRA'?[.12,.32]:[.03,.075];
- return Math.max(1,Math.round(price*(range[0]+Math.random()*(range[1]-range[0]))));
+ return Math.max(1,Math.round(price*cardValuePercentage(rarity)));
 }
 function rebalanceOwnedCard(card){
- // A one-time migration adjusts cards obtained before the value rebalance.
- // Preserve collector specials, especially Teddy and Hazel's 5,000,000 coin value.
- if(['SECRET','GRAIL','JACKPOT','TROPHY'].includes(card.rarity))return;
- const ratio=card.rarity==='LEGENDARY'?.28:['HOLO','ULTRA'].includes(card.rarity)?.14:.075;
- card.value=Math.max(1,Math.round((Number(card.value)||0)*ratio));
+ if(card.id==='teddy-hazel'||card.id==='tederoni'||card.rarity==='SECRET')return;
+ // New cards remember their exact pack. Older saves did not record pack origin;
+ // estimate it from the previous rarity-based valuation as a best effort.
+ let price=Number(card.packPrice);
+ if(!Number.isFinite(price)||price<=0){
+  if(['GRAIL','JACKPOT','TROPHY'].includes(card.rarity)){
+   price=PRICES[19]; // Older collector prizes were available in Packs 20 and 21.
+  }else{
+   const formerMean=card.rarity==='LEGENDARY'?.975:['ULTRA','HOLO'].includes(card.rarity)?.22:.0525;
+   const estimate=Math.max(1,(Number(card.value)||1)/formerMean);
+   price=PRICES.reduce((best,candidate)=>Math.abs(Math.log(candidate/estimate))<Math.abs(Math.log(best/estimate))?candidate:best,PRICES[0]);
+  }
+  card.packPrice=price;
+ }
+ card.value=newCardValue(price,card.rarity);
 }
 const PACK_CARD_ODDS=[{count:3,chance:50},{count:4,chance:15},{count:5,chance:30},{count:10,chance:5}];
 function packCardCount(){const roll=Math.random()*100;let cursor=0;for(const option of PACK_CARD_ODDS){cursor+=option.chance;if(roll<cursor)return option.count;}return 3;}
@@ -411,6 +427,15 @@ function moveBinderCoins(direction){
 $('manageWallet').onclick=()=>tab('wallet');
 $('depositBinder').onclick=()=>moveBinderCoins('in');
 $('withdrawBinder').onclick=()=>moveBinderCoins('out');
+function quickAddBinderCoins(amount){
+ if(game.coins<=0){say('No Shop coins available to add.');return;}
+ const toAdd=Math.min(game.coins,amount);
+ $('walletAmount').value=String(toAdd);
+ moveBinderCoins('in');
+}
+$('addBinder1000').onclick=()=>quickAddBinderCoins(1000);
+$('addBinder10000').onclick=()=>quickAddBinderCoins(10000);
+$('addBinderAll').onclick=()=>quickAddBinderCoins(game.coins);
 function unlockedPackCount(){return Math.min(PRICES.length,BASE_PACKS+game.rebirths);}
 function renderPacks(){
  const unlocked=unlockedPackCount(),shown=Math.min(PRICES.length,unlocked+1);
@@ -425,21 +450,22 @@ function renderPacks(){
  const isSecret=chosen===20,legendary=chosen===19;
  const intro=locked?'Complete Rebirth '+requiredRebirth+' to unlock this pack.':isSecret?'3 to 10 cards from the entire game, including every rarity. Secret Teddy and Hazel: 0.2% chance per pack.':'Every pack has 3, 4, 5, or 10 cards. Higher packs have better rarity odds.';
  const details=locked?'This pack becomes available after Rebirth '+requiredRebirth+'.':isSecret?'Teddy and Hazel is worth 5,000,000 coins, with a 0.2% chance (1 in 500) per pack opening.':legendary?'Seven ultra-rare featured cards. The top pull is Pikachu Illustrator at 0.5% per card.':chosen>14?'Higher packs have better chances for rare, fully evolved, legendary and mythical Pokémon.':'Open, collect, and trade in cards for coins.';
- $('detail').innerHTML=`<div class="muted small">PACK ${chosen+1} OF ${PRICES.length}</div><span class="bigpack">${locked?'🔒':ICONS[chosen]}</span><h2>${TITLES[chosen]} Pack</h2><div class="price">🪙 ${MONEY(p)}</div><p>${intro}</p><button class="btn gold full" id="openPack" ${locked||game.coins<p?'disabled':''}>${locked?'🔒 Locked until Rebirth '+requiredRebirth:'✨ Open Pack '+(chosen+1)}</button><div class="note">${details}<br>Cards per pack: 3 (50%), 4 (15%), 5 (30%), or 10 (5%).</div>${!locked&&(legendary||isSecret)?`<table class="probTable"><tr><th>Featured card</th><th>Demo chance</th></tr>${isSecret?`<tr><td>Teddy and Hazel · SECRET · 🪙 5,000,000</td><td>${TEDERONI.chance}%</td></tr>`:''}${JACKPOTS.map(x=>`<tr><td>${x.name}</td><td>${x.chance}%</td></tr>`).join('')}</table>`:''}<button class="btn alt full" style="margin-top:12px" id="getCoins">${locked?'View Rebirths':'Earn coins'}</button>`;
+ $('detail').innerHTML=`<div class="muted small">PACK ${chosen+1} OF ${PRICES.length}</div><span class="bigpack">${locked?'🔒':ICONS[chosen]}</span><h2>${TITLES[chosen]} Pack</h2><div class="price">🪙 ${MONEY(p)}</div><p>${intro}</p><button class="btn gold full" id="openPack" ${locked||game.coins<p?'disabled':''}>${locked?'🔒 Locked until Rebirth '+requiredRebirth:'✨ Open Pack '+(chosen+1)}</button><div class="note">${details}<br>Cards per pack: 3 (50%), 4 (15%), 5 (30%), or 10 (5%).<br>Card values: Common 1%, Holo 5%, Ultra 10%, Legendary and collector prizes 25% of pack cost. Teddy and Hazel stays at 5,000,000.<br>Most packs return less than they cost, and lucky rare pulls are never guaranteed.</div>${!locked&&(legendary||isSecret)?`<table class="probTable"><tr><th>Featured card</th><th>Demo chance</th></tr>${isSecret?`<tr><td>Teddy and Hazel · SECRET · 🪙 5,000,000</td><td>${TEDERONI.chance}%</td></tr>`:''}${JACKPOTS.map(x=>`<tr><td>${x.name} · 🪙 ${MONEY(newCardValue(p,x.rarity))}</td><td>${x.chance}%</td></tr>`).join('')}</table>`:''}<button class="btn alt full" style="margin-top:12px" id="getCoins">${locked?'View Rebirths':'Earn coins'}</button>`;
  $('openPack').onclick=openPack;$('getCoins').onclick=()=>tab(locked?'rebirth':'rewards');
 }
 function draw(){
  const i=chosen,p=PRICES[i],roll=Math.random()*100;
  // Preserve the trophy tables on Packs 20/21; secret Teddy & Hazel remains once per Pack 21 opening.
- if(i===19||i===20){let cursor=0;for(const x of JACKPOTS){cursor+=x.chance;if(roll<cursor)return Object.assign({},x)}}
- const legendChance=i<19?0:i<21?.5:i<30?2:i<40?7:15;
- const rareChance=i<10?0:i<15?2:i<21?8:i<30?20:i<40?35:55;
+ if(i===19||i===20){let cursor=0;for(const x of JACKPOTS){cursor+=x.chance;if(roll<cursor)return Object.assign({},x,{value:newCardValue(p,x.rarity),packPrice:p,packNumber:i+1})}}
+ // Hold low-value commons through the early packs; rarity rises slowly as packs advance.
+ const legendChance=i<19?0:i<21?.5:i<30?1:i<40?3:i<50?6:10;
+ const rareChance=i<12?0:i<19?1:i<21?4:i<30?8:i<40?16:i<50?28:40;
  const r=Math.random()*100;let rarity,pool,mult,color;
  if(r<legendChance){rarity='LEGENDARY';pool=POKEMON_LEGENDS;mult=2.3+Math.random()*1.1;color='#f3c872';}
  else if(r<legendChance+rareChance){rarity=(i>=28&&Math.random()<.4)?'ULTRA':'HOLO';pool=POKEMON_RARE;mult=1.1+Math.random()*1.1;color='#a38ffc';}
  else{rarity='COMMON';pool=POKEMON_COMMON;mult=.36+Math.random()*.68;color='hsl('+((i*24+156)%360)+' 45% 50%)';}
  const pokemonId=pool[Math.floor(Math.random()*pool.length)],name=POKEMON_NAMES[pokemonId-1];
- return {id:'dex-'+pokemonId,name,pokemonId,icon:rarity==='LEGENDARY'?'🌟':rarity==='COMMON'?'✦':'✨',rarity,value:newCardValue(p,rarity),color};
+ return {id:'dex-'+pokemonId,name,pokemonId,icon:rarity==='LEGENDARY'?'🌟':rarity==='COMMON'?'✦':'✨',rarity,value:newCardValue(p,rarity),packPrice:p,packNumber:i+1,color};
 }
 function cardHtml(c,results=false){const worth=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));return `<div class="card ${c.grade?'graded':''} ${results?'resultCard pull':''} ${c.locked?'cardLocked':''}" style="--c:${c.color}"><div class="topline"><span>${c.rarity}</span>${results?`<span class="stamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`:`<button class="lockToggle ${c.locked?'isLocked':''}" type="button" data-lock="${c.uid}" aria-label="${c.locked?'Unlock':'Lock'} ${safeText(c.name)}" aria-pressed="${c.locked?'true':'false'}">${c.locked?'🔒 Unlock':'🔓 Lock'}</button>`}</div>${results?'':`<span class="stamp cardStamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`}<div class="art">${artwork(c)}</div><div class="name">${c.name}</div><div class="val">🪙 ${MONEY(worth)}${results?' value':''}</div>${results?'':`<div class="commands"><button data-grade="${c.uid}" ${c.grade?'disabled':''}>${c.grade?'Graded':'Grade'}</button><button data-sell="${c.uid}" ${c.locked?'disabled aria-disabled="true" title="Unlock card before selling"':''}>${c.locked?'Locked':'Sell'}</button></div>`}</div>`;}
 function openPack(){
@@ -452,7 +478,7 @@ function openPack(){
  const secretSlot=chosen===20&&Math.random()*100<TEDERONI.chance?Math.floor(Math.random()*count):-1;
  const cards=[];
  for(let slot=0;slot<count;slot++){
-  const c=slot===secretSlot?Object.assign({},TEDERONI):draw();
+  const c=slot===secretSlot?Object.assign({},TEDERONI,{packPrice:price,packNumber:chosen+1}):draw();
   game.serial++;
   c.uid=game.serial;
   cards.push(c);
@@ -467,12 +493,13 @@ function openPack(){
  $('resultTitle').textContent=secret?'YOU FOUND TEDDY AND HAZEL!':grail?'THE ULTIMATE PULL!':jackpot?'JACKPOT!':trophy?'TROPHY CARD!':holo?'HOLOGRAPHIC!':'You pulled '+count+' cards!';
  $('resultCard').innerHTML='<div class="resultGrid">'+cards.map(c=>cardHtml(c,true)).join('')+'</div>';
  $('resultDesc').textContent=count+' cards added to your binder!'+(secret?' Teddy and Hazel is worth 5,000,000 coins, with a 0.2% chance per Pack 21 opening.':'');
- $('closeResult').textContent='View '+count+' Cards in Binder';
+ $('viewResultBinder').textContent='View '+count+' Cards in Binder';
  $('overlay').querySelector('.overlayBox').classList.add('multiPull');
  $('overlay').classList.remove('hidden');
  playEffect(secret||grail||jackpot||trophy);
 }
-$('closeResult').onclick=()=>{$('overlay').classList.add('hidden');tab('binder');};
+$('closeResult').onclick=()=>{$('overlay').classList.add('hidden');};
+$('viewResultBinder').onclick=()=>{$('overlay').classList.add('hidden');tab('binder');};
 function gradeCost(c){return Math.max(50,Math.round(c.value*.08/10)*10)}
 function renderBinder(){renderTop();$('statCards').textContent=MONEY(game.cards.length);$('statPacks').textContent=MONEY(game.opened);$('statWorth').textContent=MONEY(game.cards.reduce((a,c)=>a+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0));$('binderCards').innerHTML=game.cards.length?game.cards.map(c=>cardHtml(c)).join(''):'<div class="empty" style="grid-column:1/-1">Your binder is empty.<br>Open a pack to find your first card! 📕</div>';document.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.lock));if(!c)return;c.locked=!c.locked;persist();renderBinder();say(c.name+(c.locked?' locked. It cannot be sold.':' unlocked. You can sell it now.'))});document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.grade));if(!c)return;const cost=gradeCost(c);if(game.binderCoins<cost){const missing=cost-game.binderCoins;tab('wallet');$('walletAmount').value=String(missing);$('walletAmount').focus();say('Move '+MONEY(missing)+' coins into your Binder to grade this card.');return;}if(!confirm('Spend '+MONEY(cost)+' Binder coins to grade '+c.name+'?'))return;game.binderCoins-=cost;const r=Math.random();c.grade=r<.05?10:r<.16?9:r<.35?8:r<.57?7:r<.74?6:r<.87?5:Math.floor(Math.random()*4)+1;persist();renderBinder();say(c.name+' got Game Grade '+c.grade+'!');playEffect(c.grade>=9)});document.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>{const idx=game.cards.findIndex(c=>c.uid===Number(b.dataset.sell));if(idx<0)return;const c=game.cards[idx];if(c.locked){say('Unlock '+c.name+' before selling.');return;}const value=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));if(!confirm('Sell '+c.name+' for '+MONEY(value)+' coins? This removes it from your binder.'))return;game.coins+=value;game.cards.splice(idx,1);persist();renderBinder();say('Sold for '+MONEY(value)+' coins')});}
 function today(){return new Date().toLocaleDateString('en-CA')}
@@ -483,22 +510,28 @@ $('millionBonus').onclick=()=>{game.coins+=1000000;persist();renderTop();renderP
 const MAX_REBIRTHS=50;
 function rebirthGoal(level){return 1000n*(2n**BigInt(level-1));}
 function rebirthCoins(){return Math.max(0,game.coins)+Math.max(0,game.binderCoins);}
+function rebirthCardValue(card){return Math.round(card.value*(card.grade?(.35+card.grade*.22):1));}
+function rebirthSacrificeCards(){
+ // Never consume a locked card. Sacrifice only the two least valuable unlocked cards.
+ return game.cards.filter(c=>!c.locked).slice().sort((a,b)=>rebirthCardValue(a)-rebirthCardValue(b)).slice(0,2);
+}
 function renderRebirth(){
  const complete=game.rebirths>=MAX_REBIRTHS;
  const level=Math.min(game.rebirths+1,MAX_REBIRTHS);
  const goal=rebirthGoal(level);
  const amount=rebirthCoins();
- const readyCoins=amount>=Number(goal);
- const readyCards=game.cards.length>=2;
+ const eligibleCards=game.cards.filter(c=>!c.locked).length;
+ const readyCoins=BigInt(Math.floor(amount))>=goal;
+ const readyCards=eligibleCards>=2;
  $('rebirthLevel').textContent=game.rebirths+' / '+MAX_REBIRTHS;
  $('rebirthTarget').textContent=complete?'Complete!':goal.toLocaleString('en-US');
- $('rebirthCards').textContent=game.cards.length+' / 2';
+ $('rebirthCards').textContent=eligibleCards+' / 2';
  $('rebirthUnlock').textContent=complete?'All 71 packs unlocked!':'Next reward: Pack '+(BASE_PACKS+level)+' ('+MONEY(PRICES[BASE_PACKS+level-1])+' coins).';
  $('doRebirth').disabled=complete||!readyCoins||!readyCards;
  $('doRebirth').textContent=complete?'All 50 Rebirths Complete': 'Rebirth '+level;
  if(complete)$('rebirthProgress').textContent='All 50 rebirth levels completed!';
- else if(readyCoins&&readyCards)$('rebirthProgress').textContent='Ready! You have enough coins and cards to rebirth.';
- else $('rebirthProgress').textContent='Coins: '+MONEY(amount)+' / '+goal.toLocaleString('en-US')+' · Cards: '+game.cards.length+' / 2';
+ else if(readyCoins&&readyCards)$('rebirthProgress').textContent='Ready! Only '+goal.toLocaleString('en-US')+' coins and 2 unlocked cards will be spent.';
+ else $('rebirthProgress').textContent='Coins: '+MONEY(amount)+' / '+goal.toLocaleString('en-US')+' · Unlocked cards: '+eligibleCards+' / 2';
  $('rebirthMilestones').innerHTML=Array.from({length:MAX_REBIRTHS},(_,i)=>{
  const n=i+1,cls=n<=game.rebirths?'done':n===level&&!complete?'next':'';
  return '<div class="rebirthMilestone '+cls+'">Rebirth '+n+'<strong>'+rebirthGoal(n).toLocaleString('en-US')+' coins</strong></div>';
@@ -507,13 +540,27 @@ function renderRebirth(){
 $('doRebirth').onclick=()=>{
  if(game.rebirths>=MAX_REBIRTHS){say('You completed all 50 rebirths!');return;}
  const level=game.rebirths+1,target=rebirthGoal(level);
- if(rebirthCoins()<Number(target)||game.cards.length<2){renderRebirth();say('You need '+target.toLocaleString('en-US')+' coins and at least 2 cards.');return;}
- const message='Rebirth '+level+'? This permanently removes ALL your cards (including locked, rare, and graded cards), resets both coin balances, and starts you over with 500 coins. Your rebirth level will be saved.';
+ const consumed=rebirthSacrificeCards();
+ if(BigInt(Math.floor(rebirthCoins()))<target||consumed.length<2){
+  renderRebirth();say('You need '+target.toLocaleString('en-US')+' coins and at least 2 unlocked cards.');return;
+ }
+ // Current game balances use numbers. A safe-integer target is required for exact deductions.
+ if(target>BigInt(Number.MAX_SAFE_INTEGER)){say('Coin target too large for an exact rebirth deduction.');return;}
+ const cost=Number(target);
+ const names=consumed.map(c=>c.name).join(' and ');
+ const message='Rebirth '+level+' for '+target.toLocaleString('en-US')+' coins and exactly 2 cards ('+names+')? Extra coins and other cards stay in your wallets and Binder. Locked cards are protected.';
  if(!confirm(message))return;
- game={...INITIAL(),rebirths:level};
- // Reset all gameplay settings and progress; only the completed rebirth count persists.
- if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
- chosen=0;persist();renderAll();tab('rebirth');say('Rebirth '+level+' complete! Pack '+(BASE_PACKS+level)+' unlocked. Start again with 500 coins.');playEffect(true);
+ // Spend Shop coins first, then Binder coins, preserving all unspent coins in both wallets.
+ const shopSpend=Math.min(game.coins,cost);
+ const binderSpend=cost-shopSpend;
+ game.coins-=shopSpend;
+ game.binderCoins-=binderSpend;
+ const selected=new Set(consumed.map(c=>c.uid));
+ game.cards=game.cards.filter(c=>!selected.has(c.uid));
+ game.rebirths=level;
+ persist();renderAll();tab('rebirth');
+ say('Rebirth '+level+' complete! Spent '+MONEY(cost)+' coins and 2 cards. All extras kept. Pack '+(BASE_PACKS+level)+' unlocked.');
+ playEffect(true);
 };
 function renderSettings(){$('music').textContent=game.music?'⏸ Pause':'▶ Play';$('sounds').textContent=game.sound?'On':'Off'}
 function getAudio(){if(audio)return audio;const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;try{audio=new A()}catch(e){return null}return audio}
