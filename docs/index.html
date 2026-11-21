@@ -410,10 +410,8 @@ $('doRebirth').onclick=()=>{
  if(rebirthCoins()<Number(target)||game.cards.length<2){renderRebirth();say('You need '+target.toLocaleString('en-US')+' coins and at least 2 cards.');return;}
  const message='Rebirth '+level+'? This permanently removes ALL your cards (including locked, rare, and graded cards), resets both coin balances, and starts you over with 500 coins. Your rebirth level will be saved.';
  if(!confirm(message))return;
- const old=game;
- game={...INITIAL(),rebirths:level,sound:old.sound,music:old.music};
- // No sound continues automatically after the reset.
- game.music=false;
+ game={...INITIAL(),rebirths:level};
+ // Reset all gameplay settings and progress; only the completed rebirth count persists.
  if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
  chosen=0;persist();renderAll();tab('rebirth');say('Rebirth '+level+' complete! Start again with 500 coins.');playEffect(true);
 };
