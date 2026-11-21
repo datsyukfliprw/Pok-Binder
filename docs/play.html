@@ -356,35 +356,31 @@ function preloadCardArtwork(){
  async function worker(){while(n<keys.length){const key=keys[n++];queueImage(key);await artRequests[key];}}
  for(let i=0;i<4;i++)worker();
 }
-// Values are a percentage of the original pack price, rather than a random multiplier.
-// Rare collectors get 25%; normal cards scale down to 10%, 5%, and 1%.
-// The secret Teddy and Hazel remains a fixed 5,000,000-coin prize.
-const CARD_VALUE_BALANCE_VERSION=3;
-function cardValuePercentage(rarity){
- return ['GRAIL','JACKPOT','TROPHY','LEGENDARY'].includes(rarity)?.25:
-  rarity==='ULTRA'?.10:rarity==='HOLO'?.05:.01;
-}
-function newCardValue(price,rarity){
- return Math.max(1,Math.round(price*cardValuePercentage(rarity)));
+// Restore the original common/holo/legendary card multipliers, but divide
+// each individual reward by the average cards in a pack to allow real losses.
+// Keep collector trophies at the previously requested 25% and the secret dogs fixed.
+const PACK_CARD_ODDS=[{count:3,chance:50},{count:4,chance:15},{count:5,chance:30},{count:10,chance:5}];
+const AVERAGE_CARDS_PER_PACK=PACK_CARD_ODDS.reduce((sum,opt)=>sum+opt.count*opt.chance/100,0);
+const CARD_VALUE_BALANCE_VERSION=4;
+function newCardValue(price,rarity,originalMultiplier){
+ if(['GRAIL','JACKPOT','TROPHY'].includes(rarity))return Math.max(1,Math.round(price*.25));
+ const typicalMultiplier=rarity==='LEGENDARY'?2.85:['HOLO','ULTRA'].includes(rarity)?1.65:.70;
+ const mult=Number.isFinite(originalMultiplier)?originalMultiplier:typicalMultiplier;
+ return Math.max(1,Math.round(price*mult/AVERAGE_CARDS_PER_PACK));
 }
 function rebalanceOwnedCard(card){
  if(card.id==='teddy-hazel'||card.id==='tederoni'||card.rarity==='SECRET')return;
- // New cards remember their exact pack. Older saves did not record pack origin;
- // estimate it from the previous rarity-based valuation as a best effort.
  let price=Number(card.packPrice);
  if(!Number.isFinite(price)||price<=0){
-  if(['GRAIL','JACKPOT','TROPHY'].includes(card.rarity)){
-   price=PRICES[19]; // Older collector prizes were available in Packs 20 and 21.
-  }else{
-   const formerMean=card.rarity==='LEGENDARY'?.975:['ULTRA','HOLO'].includes(card.rarity)?.22:.0525;
-   const estimate=Math.max(1,(Number(card.value)||1)/formerMean);
-   price=PRICES.reduce((best,candidate)=>Math.abs(Math.log(candidate/estimate))<Math.abs(Math.log(best/estimate))?candidate:best,PRICES[0]);
-  }
+  // For older saves without an origin, infer the nearest pack from its current
+  // per-card value. Current pricing used 1, 5, 10 or 25% of pack cost.
+  const previousShare=['GRAIL','JACKPOT','TROPHY','LEGENDARY'].includes(card.rarity)?.25:card.rarity==='ULTRA'?.10:card.rarity==='HOLO'?.05:.01;
+  const estimated=Math.max(1,(Number(card.value)||1)/previousShare);
+  price=PRICES.reduce((best,test)=>Math.abs(Math.log(test/estimated))<Math.abs(Math.log(best/estimated))?test:best,PRICES[0]);
   card.packPrice=price;
  }
  card.value=newCardValue(price,card.rarity);
 }
-const PACK_CARD_ODDS=[{count:3,chance:50},{count:4,chance:15},{count:5,chance:30},{count:10,chance:5}];
 function packCardCount(){const roll=Math.random()*100;let cursor=0;for(const option of PACK_CARD_ODDS){cursor+=option.chance;if(roll<cursor)return option.count;}return 3;}
 const MONEY=n=>Math.round(n).toLocaleString('en-US');const $=x=>document.getElementById(x);
 const INITIAL=()=>({coins:500,binderCoins:0,cards:[],opened:0,rebirths:0,lastDaily:'',music:false,sound:true,serial:0});
@@ -450,22 +446,22 @@ function renderPacks(){
  const isSecret=chosen===20,legendary=chosen===19;
  const intro=locked?'Complete Rebirth '+requiredRebirth+' to unlock this pack.':isSecret?'3 to 10 cards from the entire game, including every rarity. Secret Teddy and Hazel: 0.2% chance per pack.':'Every pack has 3, 4, 5, or 10 cards. Higher packs have better rarity odds.';
  const details=locked?'This pack becomes available after Rebirth '+requiredRebirth+'.':isSecret?'Teddy and Hazel is worth 5,000,000 coins, with a 0.2% chance (1 in 500) per pack opening.':legendary?'Seven ultra-rare featured cards. The top pull is Pikachu Illustrator at 0.5% per card.':chosen>14?'Higher packs have better chances for rare, fully evolved, legendary and mythical Pokémon.':'Open, collect, and trade in cards for coins.';
- $('detail').innerHTML=`<div class="muted small">PACK ${chosen+1} OF ${PRICES.length}</div><span class="bigpack">${locked?'🔒':ICONS[chosen]}</span><h2>${TITLES[chosen]} Pack</h2><div class="price">🪙 ${MONEY(p)}</div><p>${intro}</p><button class="btn gold full" id="openPack" ${locked||game.coins<p?'disabled':''}>${locked?'🔒 Locked until Rebirth '+requiredRebirth:'✨ Open Pack '+(chosen+1)}</button><div class="note">${details}<br>Cards per pack: 3 (50%), 4 (15%), 5 (30%), or 10 (5%).<br>Card values: Common 1%, Holo 5%, Ultra 10%, Legendary and collector prizes 25% of pack cost. Teddy and Hazel stays at 5,000,000.<br>Most packs return less than they cost, and lucky rare pulls are never guaranteed.</div>${!locked&&(legendary||isSecret)?`<table class="probTable"><tr><th>Featured card</th><th>Demo chance</th></tr>${isSecret?`<tr><td>Teddy and Hazel · SECRET · 🪙 5,000,000</td><td>${TEDERONI.chance}%</td></tr>`:''}${JACKPOTS.map(x=>`<tr><td>${x.name} · 🪙 ${MONEY(newCardValue(p,x.rarity))}</td><td>${x.chance}%</td></tr>`).join('')}</table>`:''}<button class="btn alt full" style="margin-top:12px" id="getCoins">${locked?'View Rebirths':'Earn coins'}</button>`;
+ $('detail').innerHTML=`<div class="muted small">PACK ${chosen+1} OF ${PRICES.length}</div><span class="bigpack">${locked?'🔒':ICONS[chosen]}</span><h2>${TITLES[chosen]} Pack</h2><div class="price">🪙 ${MONEY(p)}</div><p>${intro}</p><button class="btn gold full" id="openPack" ${locked||game.coins<p?'disabled':''}>${locked?'🔒 Locked until Rebirth '+requiredRebirth:'✨ Open Pack '+(chosen+1)}</button><div class="note">${details}<br>Cards per pack: 3 (50%), 4 (15%), 5 (30%), or 10 (5%).<br>Regular card values use the original rarity rewards divided by the average 4.1 cards per pack. Collector trophies stay at 25% of pack cost; Teddy and Hazel stays at 5,000,000. Some packs lose coins, while lucky pulls can pay out more.</div>${!locked&&(legendary||isSecret)?`<table class="probTable"><tr><th>Featured card</th><th>Demo chance</th></tr>${isSecret?`<tr><td>Teddy and Hazel · SECRET · 🪙 5,000,000</td><td>${TEDERONI.chance}%</td></tr>`:''}${JACKPOTS.map(x=>`<tr><td>${x.name} · 🪙 ${MONEY(newCardValue(p,x.rarity))}</td><td>${x.chance}%</td></tr>`).join('')}</table>`:''}<button class="btn alt full" style="margin-top:12px" id="getCoins">${locked?'View Rebirths':'Earn coins'}</button>`;
  $('openPack').onclick=openPack;$('getCoins').onclick=()=>tab(locked?'rebirth':'rewards');
 }
 function draw(){
  const i=chosen,p=PRICES[i],roll=Math.random()*100;
  // Preserve the trophy tables on Packs 20/21; secret Teddy & Hazel remains once per Pack 21 opening.
  if(i===19||i===20){let cursor=0;for(const x of JACKPOTS){cursor+=x.chance;if(roll<cursor)return Object.assign({},x,{value:newCardValue(p,x.rarity),packPrice:p,packNumber:i+1})}}
- // Hold low-value commons through the early packs; rarity rises slowly as packs advance.
- const legendChance=i<19?0:i<21?.5:i<30?1:i<40?3:i<50?6:10;
- const rareChance=i<12?0:i<19?1:i<21?4:i<30?8:i<40?16:i<50?28:40;
+ // Restore the original rarity odds used before the previous change.
+ const legendChance=i<19?0:i<21?.5:i<30?2:i<40?7:15;
+ const rareChance=i<10?0:i<15?2:i<21?8:i<30?20:i<40?35:55;
  const r=Math.random()*100;let rarity,pool,mult,color;
  if(r<legendChance){rarity='LEGENDARY';pool=POKEMON_LEGENDS;mult=2.3+Math.random()*1.1;color='#f3c872';}
  else if(r<legendChance+rareChance){rarity=(i>=28&&Math.random()<.4)?'ULTRA':'HOLO';pool=POKEMON_RARE;mult=1.1+Math.random()*1.1;color='#a38ffc';}
  else{rarity='COMMON';pool=POKEMON_COMMON;mult=.36+Math.random()*.68;color='hsl('+((i*24+156)%360)+' 45% 50%)';}
  const pokemonId=pool[Math.floor(Math.random()*pool.length)],name=POKEMON_NAMES[pokemonId-1];
- return {id:'dex-'+pokemonId,name,pokemonId,icon:rarity==='LEGENDARY'?'🌟':rarity==='COMMON'?'✦':'✨',rarity,value:newCardValue(p,rarity),packPrice:p,packNumber:i+1,color};
+ return {id:'dex-'+pokemonId,name,pokemonId,icon:rarity==='LEGENDARY'?'🌟':rarity==='COMMON'?'✦':'✨',rarity,value:newCardValue(p,rarity,mult),packPrice:p,packNumber:i+1,color};
 }
 function cardHtml(c,results=false){const worth=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));return `<div class="card ${c.grade?'graded':''} ${results?'resultCard pull':''} ${c.locked?'cardLocked':''}" style="--c:${c.color}"><div class="topline"><span>${c.rarity}</span>${results?`<span class="stamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`:`<button class="lockToggle ${c.locked?'isLocked':''}" type="button" data-lock="${c.uid}" aria-label="${c.locked?'Unlock':'Lock'} ${safeText(c.name)}" aria-pressed="${c.locked?'true':'false'}">${c.locked?'🔒 Unlock':'🔓 Lock'}</button>`}</div>${results?'':`<span class="stamp cardStamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`}<div class="art">${artwork(c)}</div><div class="name">${c.name}</div><div class="val">🪙 ${MONEY(worth)}${results?' value':''}</div>${results?'':`<div class="commands"><button data-grade="${c.uid}" ${c.grade?'disabled':''}>${c.grade?'Graded':'Grade'}</button><button data-sell="${c.uid}" ${c.locked?'disabled aria-disabled="true" title="Unlock card before selling"':''}>${c.locked?'Locked':'Sell'}</button></div>`}</div>`;}
 function openPack(){
