@@ -497,7 +497,8 @@ function openPack(){
 $('closeResult').onclick=()=>{$('overlay').classList.add('hidden');};
 $('viewResultBinder').onclick=()=>{$('overlay').classList.add('hidden');tab('binder');};
 function gradeCost(c){return Math.max(50,Math.round(c.value*.08/10)*10)}
-function renderBinder(){renderTop();const sellAllButton=$('sellAllCards');const sellableCount=game.cards.filter(c=>!c.locked).length;sellAllButton.disabled=sellableCount===0;sellAllButton.textContent=sellableCount?'Sell All ('+sellableCount+')':'Sell All';$('statCards').textContent=MONEY(game.cards.length);$('statPacks').textContent=MONEY(game.opened);$('statWorth').textContent=MONEY(game.cards.reduce((a,c)=>a+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0));$('binderCards').innerHTML=game.cards.length?game.cards.map(c=>cardHtml(c)).join(''):'<div class="empty" style="grid-column:1/-1">Your binder is empty.<br>Open a pack to find your first card! 📕</div>';document.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.lock));if(!c)return;c.locked=!c.locked;persist();renderBinder();say(c.name+(c.locked?' locked. It cannot be sold.':' unlocked. You can sell it now.'))});document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{
+let sellAllArmedKey=null;
+function renderBinder(){sellAllArmedKey=null;renderTop();const sellAllButton=$('sellAllCards');const sellableCount=game.cards.filter(c=>!c.locked).length;sellAllButton.disabled=sellableCount===0;sellAllButton.textContent=sellableCount?'Sell All ('+sellableCount+')':'Sell All';$('statCards').textContent=MONEY(game.cards.length);$('statPacks').textContent=MONEY(game.opened);$('statWorth').textContent=MONEY(game.cards.reduce((a,c)=>a+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0));$('binderCards').innerHTML=game.cards.length?game.cards.map(c=>cardHtml(c)).join(''):'<div class="empty" style="grid-column:1/-1">Your binder is empty.<br>Open a pack to find your first card! 📕</div>';document.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.lock));if(!c)return;c.locked=!c.locked;persist();renderBinder();say(c.name+(c.locked?' locked. It cannot be sold.':' unlocked. You can sell it now.'))});document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{
  const c=game.cards.find(c=>c.uid===Number(b.dataset.grade));
  if(!c)return;
  const cost=gradeCost(c);
@@ -520,10 +521,17 @@ function renderBinder(){renderTop();const sellAllButton=$('sellAllCards');const 
 // Bulk selling uses the same graded value and Shop wallet as selling one card.
 $('sellAllCards').onclick=()=>{
  const sellable=game.cards.filter(c=>!c.locked);
- if(!sellable.length){say('No unlocked cards to sell.');return;}
+ if(!sellable.length){sellAllArmedKey=null;say('No unlocked cards to sell.');return;}
  const total=sellable.reduce((sum,c)=>sum+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0);
- if(!Number.isSafeInteger(total)||!Number.isSafeInteger(game.coins+total)){say('Coin total is too large for a bulk sale.');return;}
- if(!confirm('Sell all '+sellable.length+' unlocked cards for '+MONEY(total)+' Pokécoins?\n\nLocked cards will stay in your Binder. This cannot be undone.'))return;
+ if(!Number.isSafeInteger(total)||!Number.isSafeInteger(game.coins+total)){sellAllArmedKey=null;say('Coin total is too large for a bulk sale.');return;}
+ const saleKey=sellable.map(c=>c.uid).join(',')+'|'+total;
+ if(sellAllArmedKey!==saleKey){
+  sellAllArmedKey=saleKey;
+  $('sellAllCards').textContent='Are you sure? Tap again to sell';
+  say('Are you sure you want to sell all '+sellable.length+' unlocked cards for '+MONEY(total)+' Pokécoins? Tap again to sell. Locked cards stay.');
+  return;
+ }
+ sellAllArmedKey=null;
  game.cards=game.cards.filter(c=>c.locked);
  game.coins+=total;
  persist();renderBinder();renderPacks();
