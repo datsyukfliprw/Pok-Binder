@@ -120,6 +120,8 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 .walletTransfer label{flex-basis:100%;font-size:13px;font-weight:700}
 .walletTransfer input{flex:1 1 110px;min-width:0;border:1px solid #8186b0;border-radius:10px;padding:10px 12px;background:#0c1430;color:white;font:inherit}
 .walletTransfer button{flex:1 1 115px;min-height:43px}
+.walletQuick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.walletQuick button{flex:1 1 110px;min-height:43px}
 @media(max-width:390px){.binderWallet{padding:12px}.walletTransfer button{flex-basis:calc(50% - 5px)}}
 .rebirthMilestones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:270px;overflow-y:auto;margin-top:8px}
 .rebirthMilestone{padding:8px 10px;border-radius:9px;background:var(--surface2);border:1px solid var(--line);font-size:12px;min-width:0;overflow-wrap:anywhere}
@@ -166,7 +168,7 @@ button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
 <h3>🪙 Binder Grading Wallet</h3>
 <p class="muted small" style="margin:0">Move game coins from your Pack Shop wallet into your Binder. Only Binder coins can pay for grading. You can transfer them back anytime.</p>
 <div class="walletBalances"><div class="walletBalance"><span class="small muted">Pack Shop coins</span><strong id="walletMain">500</strong></div><div class="walletBalance"><span class="small muted">Binder coins</span><strong id="walletBinder">0</strong></div></div>
-<div class="walletTransfer"><label for="walletAmount">How many coins?</label><input id="walletAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="Enter amount"><button class="btn gold" id="depositBinder" type="button">Deposit into Binder</button><button class="btn alt" id="withdrawBinder" type="button">Move back to Shop</button></div>
+<div class="walletTransfer"><label for="walletAmount">How many coins?</label><input id="walletAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="Enter amount"><button class="btn gold" id="depositBinder" type="button">Deposit into Binder</button><button class="btn alt" id="withdrawBinder" type="button">Move back to Shop</button></div><div class="walletQuick" aria-label="Quickly add coins to Binder"><button class="btn alt" id="addBinder1000" type="button">Add 1,000</button><button class="btn alt" id="addBinder10000" type="button">Add 10,000</button><button class="btn gold" id="addBinderAll" type="button">Add All Shop Coins</button></div>
 </div>
 </div></section>
 
@@ -425,6 +427,15 @@ function moveBinderCoins(direction){
 $('manageWallet').onclick=()=>tab('wallet');
 $('depositBinder').onclick=()=>moveBinderCoins('in');
 $('withdrawBinder').onclick=()=>moveBinderCoins('out');
+function quickAddBinderCoins(amount){
+ if(game.coins<=0){say('No Shop coins available to add.');return;}
+ const toAdd=Math.min(game.coins,amount);
+ $('walletAmount').value=String(toAdd);
+ moveBinderCoins('in');
+}
+$('addBinder1000').onclick=()=>quickAddBinderCoins(1000);
+$('addBinder10000').onclick=()=>quickAddBinderCoins(10000);
+$('addBinderAll').onclick=()=>quickAddBinderCoins(game.coins);
 function unlockedPackCount(){return Math.min(PRICES.length,BASE_PACKS+game.rebirths);}
 function renderPacks(){
  const unlocked=unlockedPackCount(),shown=Math.min(PRICES.length,unlocked+1);
