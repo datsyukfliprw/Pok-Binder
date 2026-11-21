@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#11142c"><title>Poké Pack Lab · Million Coin Edition</title>
+<style>
+:root{--bg:#101225;--surface:#1c203c;--surface2:#272c50;--line:#40466b;--txt:#f7f7ff;--muted:#afb9d8;--a:#a7f3d0;--yellow:#ffd878;--pink:#fc95c0;--shadow:0 15px 36px #03061555}*{box-sizing:border-box}body{margin:0;background:radial-gradient(1000px 500px at 50% -200px,#484184 0,transparent 85%),var(--bg);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--txt)}button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #fff;outline-offset:3px}button:disabled{opacity:.46;cursor:not-allowed}.app{max-width:1050px;margin:auto;padding:20px 16px 40px}.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px}.logo{background:linear-gradient(135deg,#ffdf81,#ff8686);width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:25px;box-shadow:var(--shadow)}h1{font-size:23px;line-height:1.15;letter-spacing:-.03em;margin:0}h2{font-size:23px;margin:0 0 6px}h3{margin:0 0 8px}.subtitle,.muted{color:var(--muted)}.small{font-size:12px}.chip{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:10px 14px;font-weight:750}.chip strong{color:var(--yellow)}.tabs{display:flex;gap:7px;margin:24px 0;overflow:auto;padding-bottom:4px}.tab{padding:11px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--muted);white-space:nowrap;font-weight:700}.tab.active{background:var(--a);color:#16223e;border-color:var(--a)}.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}.hidden{display:none!important}.hero{display:grid;grid-template-columns:1fr auto;gap:15px;align-items:center}.hero p{color:var(--muted);margin:0}.heroArt{font-size:65px;filter:drop-shadow(0 10px 20px #0008)}.mainRow{display:grid;grid-template-columns:1.3fr .8fr;gap:18px;margin-top:18px}.headline{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.packGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.pack{background:linear-gradient(160deg,hsl(var(--h) 60% 27%),#222645);border:1px solid #747a9e55;border-radius:15px;text-align:left;padding:11px;color:var(--txt);min-height:174px;position:relative;overflow:hidden;transition:transform .15s,border-color .15s}.pack:hover,.pack.selected{transform:translateY(-2px);border-color:#a7f3d0}.pack.selected{box-shadow:inset 0 0 0 2px #a7f3d0}.pack:after{content:'✧';position:absolute;right:-8px;top:4px;font-size:90px;opacity:.1}.packIcon{display:grid;place-items:center;font-size:48px;min-height:77px;text-shadow:0 8px 15px #0008}.packName{font-weight:750;font-size:13px;position:relative;z-index:1}.packPrice{color:var(--yellow);font-weight:850;font-size:13px;position:relative;z-index:1}.btn{border:0;border-radius:12px;padding:12px 17px;background:var(--a);color:#112838;font-weight:800;display:inline-flex;justify-content:center;align-items:center;gap:8px}.btn.alt{background:var(--surface2);color:var(--txt);border:1px solid var(--line)}.btn.gold{background:var(--yellow)}.btn:active{transform:scale(.98)}.btn.full{width:100%}.btn.subtle{border:1px solid var(--line);background:transparent;color:var(--muted)}.btn.sm{padding:7px 10px;font-size:12px}.detail{text-align:center;position:sticky;top:12px}.detail .bigpack{font-size:90px;display:block;margin:4px auto 12px;filter:drop-shadow(0 10px 12px #0006)}.detail .price{font-size:26px;font-weight:900;color:var(--yellow)}.detail p{color:var(--muted)}.note{font-size:13px;color:var(--muted);margin-top:12px}.notice{background:#141e36;border:1px solid #3c5373;padding:12px 14px;border-radius:12px;color:#c7dce9;font-size:13px;margin:16px 0}.statGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:13px 0}.stat{background:var(--surface2);padding:13px;border-radius:12px;text-align:center}.stat b{display:block;font-size:22px;color:var(--a)}.stack{display:grid;gap:10px}.feature{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface2);padding:13px;border-radius:12px}.feature .left{display:flex;gap:10px;align-items:center}.feature .big{font-size:24px}.millionFeature{background:linear-gradient(110deg,#51451f,#393251);border:1px solid #ffd87880;flex-wrap:wrap}.millionFeature .btn{white-space:nowrap}.binderGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:13px}.card{--c:#94a3b8;position:relative;min-height:230px;background:linear-gradient(150deg,var(--c),#31365e 60%,#181c34);border:4px solid #e5d8a8;border-radius:13px;color:white;box-shadow:0 8px 22px #0008;padding:11px;overflow:hidden}.card.graded{border-color:#b9e9ff;box-shadow:0 0 0 2px #80bfff55,0 8px 22px #0008}.card .topline{display:flex;justify-content:space-between;gap:3px;font-size:11px;font-weight:850}.card .art{font-size:65px;min-height:93px;display:grid;place-items:center;filter:drop-shadow(0 9px 7px #0007)}.card .name{font-weight:900;font-size:15px;line-height:1.2}.card .val{color:#ffedb9;font-weight:800;margin-top:5px}.card .stamp{border:1px solid #ffffff99;border-radius:6px;padding:2px 5px;font-size:10px;white-space:nowrap}.card .commands{position:absolute;bottom:9px;right:9px;left:9px;display:flex;gap:4px}.card .commands button{flex:1;border:1px solid #ffffff66;border-radius:6px;background:#0a113ec9;color:white;padding:5px 2px;font-size:11px;font-weight:750}.panelTop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px}.overlay{position:fixed;inset:0;background:#060817de;z-index:10;display:grid;place-items:center;padding:12px;overflow:auto}.overlayBox{background:radial-gradient(circle at 50% 0,#3d3c78,#1b1e39 65%);border:1px solid #aaaadb77;border-radius:22px;max-width:480px;width:100%;padding:23px;text-align:center;box-shadow:0 30px 70px #000a}.pull{animation:pop .6s cubic-bezier(.2,1.5,.5,1)}@keyframes pop{0%{transform:scale(.45) rotate(-9deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}.resultCard{max-width:260px;min-height:335px;margin:15px auto}.resultCard .art{font-size:105px;min-height:174px}.resultCard .name{font-size:22px}.resultsTitle{color:var(--yellow);font-size:27px;margin:2px 0}.footer{color:var(--muted);text-align:center;font-size:12px;margin-top:24px}.settingRow{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--surface2);padding:14px;border-radius:12px;margin-top:11px}.settingRow button{min-width:100px}.probTable{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}.probTable th,.probTable td{text-align:left;border-bottom:1px solid var(--line);padding:8px 4px}.probTable td:last-child{text-align:right}.badge{font-weight:800;color:#ffd878}.sparkles{letter-spacing:.2em;color:var(--yellow)}.empty{text-align:center;padding:50px 10px;color:var(--muted)}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:20;border:1px solid #b3efdf88;background:#1f3a43;color:white;padding:12px 18px;border-radius:16px;max-width:90%;text-align:center;box-shadow:var(--shadow)}@media(max-width:720px){.mainRow{grid-template-columns:1fr}.detail{position:static}.packGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:15px}}@media(max-width:420px){.packGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.heroArt{font-size:48px}.app{padding:14px 11px 40px}.brand h1{font-size:21px}.panel{border-radius:16px}}
+
+/* Pokémon character artwork in place of prototype emoji placeholders. */
+.card .art{display:flex;align-items:center;justify-content:center;min-height:126px;overflow:hidden}
+.card .art .pokemonArt{display:block;width:min(100%,160px);height:119px;object-fit:contain;filter:drop-shadow(0 6px 5px #0008)}
+.resultCard .art{min-height:190px}
+.resultCard .art .pokemonArt{width:min(100%,235px);height:185px}
+.artFallback{font-size:17px;font-weight:800;line-height:1.2;text-shadow:none;padding:12px}
+.resultCard .art .artFallback{font-size:22px}
+
+.previewWarning{border:2px solid #f4cf87;background:#3c2940;color:#fff6d8;padding:13px 16px;border-radius:14px;margin-bottom:12px;font-weight:500}
+.previewWarning strong{color:#ffe7a0}
+
+/* Full trading-card images, with illustrated card fallbacks for offline play. */
+.card { min-height:0; display:flex; flex-direction:column; padding:9px; }
+.card .topline {align-items:center; margin-bottom:6px; min-height:16px}
+.card .art {display:block; position:relative; width:100%; height:auto; min-height:0; aspect-ratio: 245 / 337; overflow:hidden; border-radius:7px; background:#101529; filter:none; isolation:isolate;}
+.card .art .tcgCardImage {display:block; width:100%;height:100%;object-fit:contain; border-radius:7px;box-shadow:none; }
+.card .art .tcgCardImage:not(.loaded){opacity:0;position:absolute;inset:0;}
+.card .art .tcgCardImage.loaded{opacity:1;position:relative;z-index:2}
+.card .art .tcgBackup {position:absolute;inset:0; display:flex;flex-direction:column;gap:5px;padding:10px 8px;align-items:stretch;text-align:left; background:linear-gradient(155deg,#ffe38d 0%,#f4ad56 10%,#d5e6d6 55%,#f4deb4 96%);border:5px solid #e8b957;color:#182e30;border-radius:7px; font-size:10px;}
+.card .art .tcgBackup.tcgTrophy {background:linear-gradient(140deg,#fbe58e 0%,#b39be6 44%,#deefff 100%);border-color:#f1d281}
+.card .art .backupHead {display:flex;justify-content:space-between;align-items:center;font-size:clamp(10px,2vw,15px);font-weight:900;gap:4px;line-height:1.1;}
+.card .art .backupHead span:last-child {font-size:10px;white-space:nowrap}
+.card .art .backupPhoto {flex:1;min-height:0; border:2px solid #dab565;background:linear-gradient(120deg,#def1f9,#f8f4cb);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.card .art .backupPhoto {position:relative;} .card .art .backupPhoto .backupIcon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(36px,6vw,76px);background:radial-gradient(circle,#fff9c3 0%,#afdded 75%);line-height:1;} .card .art .backupPhoto img {position:relative;z-index:1;width:100%;height:100%;object-fit:contain;}
+.card .art .backupMoves {font-size:9px;font-weight:700;display:flex;flex-direction:column;gap:6px;line-height:1.15}
+.card .art .backupBottom{border-top:1px solid #998c5c;padding-top:4px;font-size:8px;color:#495558;}
+.card .name {font-size:13px;margin-top:8px;min-height:15px;overflow-wrap:anywhere}
+.card .val {font-size:12px;margin-top:5px}
+.card .commands {position:relative;right:auto;left:auto;bottom:auto;margin-top:auto;padding-top:9px;}
+.card .commands button {min-height:32px;font-size:12px}
+.resultCard {max-width:275px;min-height:0;margin:12px auto}
+.resultCard .art {height:auto;min-height:0;aspect-ratio:245/337}
+.resultCard .name {font-size:16px;line-height:1.2}
+.resultCard .art .tcgBackup {padding:12px;gap:9px}
+.resultCard .art .backupMoves {font-size:11px}
+.resultCard .art .backupBottom {font-size:10px}
+@media (max-width:420px) { .card .art .tcgBackup{padding:5px;gap:3px;border-width:3px} .card .art .backupHead{font-size:10px} .card .art .backupHead span:last-child{font-size:8px} .card .art .backupMoves{font-size:8px;gap:3px} .card .art .backupBottom{font-size:7px} .resultCard .art .tcgBackup{padding:12px;gap:8px;border-width:5px} .resultCard .art .backupHead{font-size:16px} .resultCard .art .backupMoves{font-size:11px} .resultCard .art .backupBottom{font-size:10px} }
+@media (max-height:700px) { .overlayBox {max-height:94dvh;overflow:auto} .resultCard{max-width:220px} }
+
+/* Phone portrait and installed-app layout. */
+html, body {min-width:0; width:100%; overflow-x:clip; overscroll-behavior-x:none;}
+button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+@media (max-width:760px) {
+  .app {box-sizing:border-box;width:100%;max-width:100%; padding: max(14px, env(safe-area-inset-top)) 12px max(34px, env(safe-area-inset-bottom));}
+  .top,.brand,.panel,.mainRow,.mainRow>div {min-width:0;}
+  .brand {flex:1 1 190px;}
+  .brand h1 {font-size:clamp(19px,5.4vw,24px);}
+  .chip {padding:8px 11px;white-space:nowrap;}
+  .tabs {margin:14px -12px 16px; padding:7px 12px;position:sticky;top:0;z-index:4;background:var(--bg);scrollbar-width:none;}
+  .tabs::-webkit-scrollbar {display:none}
+  .tab {flex:0 0 auto; min-height:44px; padding:10px 13px;}
+  .hero {grid-template-columns:minmax(0,1fr) auto;}
+  .heroArt {font-size:42px;}
+  .mainRow {grid-template-columns:minmax(0,1fr)!important;gap:16px;}
+  .packGrid {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .pack {min-width:0;min-height:146px;padding:10px;}
+  .packIcon {min-height:66px;font-size:40px;}
+  .detail {position:static;}
+  .panel {padding:14px;}
+  .binderGrid {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+  .statGrid {grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;}
+  .stat {min-width:0;padding:9px 5px;}
+  .stat b {font-size:clamp(15px,4.7vw,22px);}
+  .stat .small {font-size:10px;}
+  .overlay {padding:12px;align-items:center;}
+  .overlayBox {max-height:calc(100dvh - 24px); overflow:auto; overscroll-behavior:contain;padding:16px;}
+  .resultCard {width:100%;max-width:min(230px,65vw);}
+  .resultCard .art {max-width:100%;}
+  .resultCard .name {font-size:15px;}
+  .card .topline {font-size:10px;}
+  .card .commands button {min-height:40px;}
+}
+@media(max-width:350px) {
+ .app {padding-left:9px;padding-right:9px;}
+ .tabs {margin-left:-9px;margin-right:-9px;}
+ .packGrid {gap:8px;}
+ .pack {min-height:133px;padding:8px;}
+ .packIcon {font-size:34px;min-height:59px;}
+ .packName,.packPrice {font-size:12px;}
+ .heroArt {font-size:34px;}
+ .chip {font-size:12px;}
+}
+@media(display-mode:standalone) {
+ .app {padding-top:max(18px,env(safe-area-inset-top));}
+}
+
+.card.cardLocked{border-color:#f6cf79;box-shadow:0 0 0 2px #efc66c66,0 8px 22px #0008}
+.card .lockToggle{min-height:34px;padding:5px 9px;border-radius:8px;background:#242a49;color:#fff;border:1px solid #b8bbdb;font-size:12px;font-weight:800;white-space:nowrap}
+.card .lockToggle.isLocked{background:#f6d27d;color:#292030;border-color:#f6d27d}
+.card .cardStamp{display:inline-block;align-self:flex-start;margin-bottom:5px}
+.card .commands button:disabled{opacity:.65;cursor:not-allowed}
+@media(max-width:420px){.card .lockToggle{padding:5px 6px;font-size:11px}}
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" sizes="any" href="./icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Poké Pack Lab">
+</head><body><div class="app">
+<header class="top"><div class="brand"><div class="logo" aria-hidden="true">✦</div><div><h1>Poké Pack Lab</h1><div class="subtitle small">MILLION COIN EDITION · PRIVATE PLAY TEST</div></div></div><div class="chip">🪙 <strong id="coins">500</strong> coins</div></header>
+<nav class="tabs" aria-label="Game sections"><button class="tab active" data-tab="shop">🎁 Pack Shop</button><button class="tab" data-tab="binder">📕 Binder</button><button class="tab" data-tab="rewards">⭐ Rewards</button><button class="tab" data-tab="settings">⚙️ Settings</button></nav>
+<section id="shop" class="page"><div id="previewWarning" class="previewWarning" role="status"><strong>Preview only:</strong> Your iPad Files preview can show the 21 packs, but it cannot open them. To play, return to the HTML Viewer website in Safari, choose <strong>Upload → Choose File</strong>, select this file, then tap <strong>Full screen</strong>.</div><div class="panel hero"><div><h2>Open a pack. Chase a legend.</h2><p>Start with 500 coins. Collect cards, grade your favorites, sell duplicates, and work your way up to Pack 21.</p></div><div class="heroArt">⚡🃏</div></div><div class="mainRow"><div><div class="headline"><h3>Choose a pack <span class="muted small">(21 packs)</span></h3><span class="muted small">Tap one to preview</span></div><div id="packs" class="packGrid"><button class="pack selected" style="--h:184" data-pack="0" aria-label="Pack 1, Starter, 100 coins"><span class="packIcon">🌱</span><div class="packName">Pack 1<br>Starter</div><div class="packPrice">🪙 100</div></button><button class="pack " style="--h:209" data-pack="1" aria-label="Pack 2, Forest, 150 coins"><span class="packIcon">🌿</span><div class="packName">Pack 2<br>Forest</div><div class="packPrice">🪙 150</div></button><button class="pack " style="--h:234" data-pack="2" aria-label="Pack 3, Sky, 225 coins"><span class="packIcon">☁️</span><div class="packName">Pack 3<br>Sky</div><div class="packPrice">🪙 225</div></button><button class="pack " style="--h:259" data-pack="3" aria-label="Pack 4, Ember, 320 coins"><span class="packIcon">🔥</span><div class="packName">Pack 4<br>Ember</div><div class="packPrice">🪙 320</div></button><button class="pack " style="--h:284" data-pack="4" aria-label="Pack 5, Ocean, 450 coins"><span class="packIcon">🌊</span><div class="packName">Pack 5<br>Ocean</div><div class="packPrice">🪙 450</div></button><button class="pack " style="--h:309" data-pack="5" aria-label="Pack 6, Thunder, 620 coins"><span class="packIcon">⚡</span><div class="packName">Pack 6<br>Thunder</div><div class="packPrice">🪙 620</div></button><button class="pack " style="--h:334" data-pack="6" aria-label="Pack 7, Moonlight, 850 coins"><span class="packIcon">🌙</span><div class="packName">Pack 7<br>Moonlight</div><div class="packPrice">🪙 850</div></button><button class="pack " style="--h:359" data-pack="7" aria-label="Pack 8, Crystal, 1,120 coins"><span class="packIcon">💎</span><div class="packName">Pack 8<br>Crystal</div><div class="packPrice">🪙 1,120</div></button><button class="pack " style="--h:24" data-pack="8" aria-label="Pack 9, Ancient, 1,500 coins"><span class="packIcon">🏛️</span><div class="packName">Pack 9<br>Ancient</div><div class="packPrice">🪙 1,500</div></button><button class="pack " style="--h:49" data-pack="9" aria-label="Pack 10, Aurora, 1,950 coins"><span class="packIcon">🌈</span><div class="packName">Pack 10<br>Aurora</div><div class="packPrice">🪙 1,950</div></button><button class="pack " style="--h:74" data-pack="10" aria-label="Pack 11, Dragon, 2,450 coins"><span class="packIcon">🐉</span><div class="packName">Pack 11<br>Dragon</div><div class="packPrice">🪙 2,450</div></button><button class="pack " style="--h:99" data-pack="11" aria-label="Pack 12, Cosmic, 3,050 coins"><span class="packIcon">🌌</span><div class="packName">Pack 12<br>Cosmic</div><div class="packPrice">🪙 3,050</div></button><button class="pack " style="--h:124" data-pack="12" aria-label="Pack 13, Mystic, 3,750 coins"><span class="packIcon">🔮</span><div class="packName">Pack 13<br>Mystic</div><div class="packPrice">🪙 3,750</div></button><button class="pack " style="--h:149" data-pack="13" aria-label="Pack 14, Royal, 4,600 coins"><span class="packIcon">👑</span><div class="packName">Pack 14<br>Royal</div><div class="packPrice">🪙 4,600</div></button><button class="pack " style="--h:174" data-pack="14" aria-label="Pack 15, Diamond, 5,700 coins"><span class="packIcon">💠</span><div class="packName">Pack 15<br>Diamond</div><div class="packPrice">🪙 5,700</div></button><button class="pack " style="--h:199" data-pack="15" aria-label="Pack 16, Champion, 7,100 coins"><span class="packIcon">🏆</span><div class="packName">Pack 16<br>Champion</div><div class="packPrice">🪙 7,100</div></button><button class="pack " style="--h:224" data-pack="16" aria-label="Pack 17, Master, 8,950 coins"><span class="packIcon">✨</span><div class="packName">Pack 17<br>Master</div><div class="packPrice">🪙 8,950</div></button><button class="pack " style="--h:249" data-pack="17" aria-label="Pack 18, Celestial, 11,300 coins"><span class="packIcon">🌠</span><div class="packName">Pack 18<br>Celestial</div><div class="packPrice">🪙 11,300</div></button><button class="pack " style="--h:274" data-pack="18" aria-label="Pack 19, Mythic, 14,300 coins"><span class="packIcon">🌟</span><div class="packName">Pack 19<br>Mythic</div><div class="packPrice">🪙 14,300</div></button><button class="pack " style="--h:299" data-pack="19" aria-label="Pack 20, LEGENDARY, 18,850 coins"><span class="packIcon">👑</span><div class="packName">Pack 20<br>LEGENDARY</div><div class="packPrice">🪙 18,850</div></button><button class="pack " style="--h:324" data-pack="20" aria-label="Pack 21, ULTIMATE, 500,000 coins"><span class="packIcon">🐕</span><div class="packName">Pack 21<br>ULTIMATE</div><div class="packPrice">🪙 500,000</div></button></div></div><div><div id="detail" class="panel detail"><div class="muted small">PACK 1 OF 20</div><span class="bigpack">🌱</span><h2>Starter Pack</h2><div class="price">🪙 100</div><p>One surprise collectible card in each pack.</p><button class="btn gold full" disabled>Open in the HTML Viewer to play</button><div class="note">If the packs do not respond, this file is being displayed as a preview instead of a playable game.</div></div><div class="notice"><strong>Legendary Pack 20:</strong> 0.5% Pikachu Illustrator PSA 10, 4.5% 1st Edition Holo Charizard, plus five other trophy cards. These are <strong>game odds</strong>, not real-life pull rates.</div></div></div></section>
+<section id="binder" class="page hidden"><div class="panel"><div class="panelTop"><div><h2>My Binder</h2><p class="muted" style="margin:0">Tap Lock at the top of a card to protect it. Unlock before selling. You can still grade locked cards.</p></div><span class="chip" id="count">0 cards</span></div><div class="statGrid"><div class="stat"><b id="statCards">0</b><span class="small muted">Cards</span></div><div class="stat"><b id="statPacks">0</b><span class="small muted">Packs opened</span></div><div class="stat"><b id="statWorth">0</b><span class="small muted">Binder value</span></div></div><div id="binderCards" class="binderGrid"></div></div></section>
+<section id="rewards" class="page hidden"><div class="panel"><h2>Earn coins</h2><p class="muted">Not enough for your next pack? Get back in the game without spending real money.</p><div class="stack"><div class="feature millionFeature"><div class="left"><div class="big">💰</div><div><b>Million-coin bonus</b><div class="muted small">Get 1,000,000 game coins each tap!</div></div></div><button class="btn gold" id="millionBonus">+1,000,000</button></div><div class="feature"><div class="left"><div class="big">🎁</div><div><b>Daily login reward</b><div class="muted small">+500 coins once per day</div></div></div><button class="btn gold" id="daily">Claim</button></div><div class="feature"><div class="left"><div class="big">🗂️</div><div><b>Sort your card box</b><div class="muted small">+100 coins each time · practice mode</div></div></div><button class="btn" id="earn">Sort +100</button></div><div class="feature"><div class="left"><div class="big">🏆</div><div><b>Collect rare cards</b><div class="muted small">Find your favorite cards in the binder</div></div></div><span class="badge">Have fun!</span></div></div></div></section>
+<section id="settings" class="page hidden"><div class="panel"><h2>Game settings</h2><div class="settingRow"><div><b>Install on your phone</b><div class="small muted">iPhone/iPad: Safari Share → Add to Home Screen. Android: browser menu → Install app.</div></div><button class="btn" id="installApp">Install</button></div><div class="settingRow"><div><b>Chill lo-fi soundtrack</b><div class="small muted">Original synthesized keyboard, bass and soft beat · starts when you tap Play</div></div><button class="btn" id="music">▶ Play</button></div><div class="settingRow"><div><b>Pack sound effects</b><div class="small muted">Little chimes and a jackpot fanfare</div></div><button class="btn alt" id="sounds">On</button></div><div class="settingRow"><div><b>Restart save</b><div class="small muted">Erases your binder and coins on this device</div></div><button class="btn subtle" id="reset">Reset</button></div><div class="notice">Your progress stays in this browser's local storage. This is a stand-alone, offline HTML game, not a public website or a real-money game. When connected to the internet, full Pokémon trading-card scans are loaded from TCGdex. If unavailable, a fan-made illustrated card is shown instead. The backup Pokémon pictures use the public PokéAPI artwork repository when available. This fan-made demo has no affiliation with Pokémon or PSA.</div></div></section>
+<div class="footer">Unofficial fan-made game · Trading-card pictures load online when available · Fictional coins · No purchases</div></div>
+<div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-label="Pack opening result"><div class="overlayBox"><div class="sparkles">✦ ✦ ✦</div><h2 id="resultTitle" class="resultsTitle">New card!</h2><div id="resultCard"></div><p id="resultDesc" class="muted"></p><button class="btn full" id="closeResult">Add to Binder ✦</button></div></div><div id="toast" class="toast hidden" role="status"></div>
+<script>
+(function(){'use strict';
+const PRICES=[100,150,225,320,450,620,850,1120,1500,1950,2450,3050,3750,4600,5700,7100,8950,11300,14300,18850,500000];
+const TITLES=['Starter','Forest','Sky','Ember','Ocean','Thunder','Moonlight','Crystal','Ancient','Aurora','Dragon','Cosmic','Mystic','Royal','Diamond','Champion','Master','Celestial','Mythic','LEGENDARY','ULTIMATE'];
+const ICONS=['🌱','🌿','☁️','🔥','🌊','⚡','🌙','💎','🏛️','🌈','🐉','🌌','🔮','👑','💠','🏆','✨','🌠','🌟','👑','🐕'];
+const COMMON=[['Bulbasaur','🌱'],['Charmander','🔥'],['Squirtle','💦'],['Pidgey','🪶'],['Eevee','🦊'],['Jigglypuff','🎤'],['Meowth','🐈'],['Psyduck','🦆'],['Snorlax','💤'],['Pikachu','⚡'],['Vulpix','🦊'],['Oddish','🌿'],['Magikarp','🐟'],['Lapras','🌊'],['Dratini','🐉'],['Cubone','💀'],['Mareep','🐑'],['Togepi','🥚'],['Riolu','🥊'],['Mudkip','💧'],['Piplup','🐧'],['Sprigatito','🍃'],['Fuecoco','🔥'],['Quaxly','🦆']];
+const RARES=[['Gengar','👻'],['Mew','🌸'],['Mewtwo','🔮'],['Dragonite','🐲'],['Gyarados','🐉'],['Lugia','🌊'],['Ho-Oh','🔥'],['Rayquaza','🌌'],['Arceus','🌟'],['Umbreon','🌙'],['Sylveon','🎀'],['Greninja','🥷'],['Lucario','🥊'],['Charizard','🔥'],['Blastoise','💧'],['Venusaur','🌿']];
+const JACKPOTS=[
+ {id:'illustrator',name:'Pikachu Illustrator · PSA 10',icon:'⚡🎨',rarity:'GRAIL',value:150000,color:'#e0b85c',chance:0.5},
+ {id:'charizard1999',name:'1st Edition Holo Charizard',icon:'🔥🐉',rarity:'JACKPOT',value:75000,color:'#fd7a4f',chance:4.5},
+ {id:'trophy-pikachu',name:'1997 Trophy Pikachu No. 1 Trainer',icon:'🏆⚡',rarity:'TROPHY',value:65000,color:'#eebd50',chance:1.5},
+ {id:'secret-battle',name:'Super Secret Battle No. 1 Trainer',icon:'🎖️🔮',rarity:'TROPHY',value:61000,color:'#9b83f4',chance:1.25},
+ {id:'kangaskhan',name:'Kangaskhan Family Event Trophy',icon:'🦘🏆',rarity:'TROPHY',value:55000,color:'#e5a0b0',chance:1.1},
+ {id:'masters-key',name:"2010 Master's Key",icon:'🗝️✨',rarity:'TROPHY',value:48000,color:'#92dbff',chance:0.9},
+ {id:'university-karp',name:'Tamamushi University Magikarp',icon:'🐟🎓',rarity:'TROPHY',value:43000,color:'#ecae74',chance:0.75}
+ ];
+const TEDERONI={id:'teddy-hazel',name:'Teddy and Hazel',icon:'🐕💤',rarity:'SECRET',value:5000000,color:'#e8b2ff',chance:0.2};
+// Actual, full trading-card pictures via TCGdex. Each ordinary species is
+// matched to a printed Pokemon card, with a fallback that is STILL a complete
+// illustrated game card when there is no connection or an image is missing.
+const POKEDEX={Bulbasaur:1,Charmander:4,Squirtle:7,Pidgey:16,Eevee:133,Jigglypuff:39,Meowth:52,Psyduck:54,Snorlax:143,Pikachu:25,Vulpix:37,Oddish:43,Magikarp:129,Lapras:131,Dratini:147,Cubone:104,Mareep:179,Togepi:175,Riolu:447,Mudkip:258,Piplup:393,Sprigatito:906,Fuecoco:909,Quaxly:912,Gengar:94,Mew:151,Mewtwo:150,Dragonite:149,Gyarados:130,Lugia:249,'Ho-Oh':250,Rayquaza:384,Arceus:493,Umbreon:197,Sylveon:700,Greninja:658,Lucario:448,Charizard:6,Blastoise:9,Venusaur:3,Kangaskhan:115};
+const SPECIAL_LOOKUPS={
+ illustrator:[['ja','ポケモンイラストレーター'],['en','Pikachu Illustrator'],['en','Pokémon Illustrator']],
+ charizard1999:[['en','Charizard']],
+ 'trophy-pikachu':[['ja','ピカチュウ'],['en','No. 1 Trainer']],
+ 'secret-battle':[['en','No. 1 Trainer'],['ja','No.1 Trainer']],
+ kangaskhan:[['ja','ガルーラ'],['en','Kangaskhan']],
+ 'masters-key':[['en',"Master's Key"],['ja','マスターのカギ']],
+ 'university-karp':[['ja','コイキング'],['en','Magikarp']]
+};
+const SPECIAL_IDS=new Set(Object.keys(SPECIAL_LOOKUPS));
+const TCG_FIXED={'charizard1999':'https://images.pokemontcg.io/base1/4.png'};
+const tcgImages=Object.assign(Object.create(null),TCG_FIXED);
+try {Object.assign(tcgImages,JSON.parse(localStorage.getItem('poke_pack_lab_art_v1')||'{}'));}catch(e){}
+
+const artRequests=Object.create(null);
+const safeText=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+function cleanName(c){return String(c.name||'Pokémon').replace(/ · Holo$/,'');}
+function cardKey(c){return SPECIAL_IDS.has(c.id)?c.id:cleanName(c);}
+function fallbackPokemon(c){
+ const n=cleanName(c);
+ if(n.includes('Pikachu'))return 'Pikachu';
+ if(n.includes('Charizard'))return 'Charizard';
+ if(n.includes('Kangaskhan'))return 'Kangaskhan';
+ if(n.includes('Magikarp'))return 'Magikarp';
+ if(c.id==='secret-battle'||c.id==='masters-key')return 'Mewtwo';
+ return n;
+}
+function fullFallback(c){
+ const label=safeText(cleanName(c)), number=POKEDEX[fallbackPokemon(c)];
+ const pokemonArt=`<span class="backupIcon">${safeText(c.icon||'✦')}</span>`+(number?`<img alt="" loading="lazy" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${number}.png">`:'');
+ const custom=c.id==='teddy-hazel'||c.id==='tederoni',special=SPECIAL_IDS.has(c.id);
+ const art=custom?`<svg viewBox="0 0 280 250" role="img" aria-label="Teddy the giant golden curly dog and Hazel the dark dog snuggling while asleep" style="width:100%;height:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+<defs><radialGradient id="night" cx="45%" cy="30%" r="78%"><stop stop-color="#9f72db"/><stop offset=".6" stop-color="#5745a6"/><stop offset="1" stop-color="#1c1c54"/></radialGradient><radialGradient id="gold" cx="40%" cy="26%" r="72%"><stop stop-color="#f8c578"/><stop offset=".8" stop-color="#ae6730"/><stop offset="1" stop-color="#78411f"/></radialGradient><radialGradient id="coal" cx="35%" cy="25%" r="75%"><stop stop-color="#5b5563"/><stop offset="1" stop-color="#24202d"/></radialGradient></defs>
+<rect width="280" height="250" fill="url(#night)"/><g fill="#fff2c6"><circle cx="22" cy="25" r="2"/><circle cx="255" cy="25" r="3"/><circle cx="231" cy="70" r="2"/><circle cx="58" cy="82" r="2"/><path d="M140 20v14m-7-7h14M34 122v12m-6-6h12M243 157v12m-6-6h12" stroke="#ffe8a5" stroke-width="2"/></g>
+<path d="M-20 216Q57 164 126 200Q187 161 306 218V270H-20Z" fill="#eadfd2"/><path d="M-20 235Q85 195 149 230Q209 202 308 226V260H-20Z" fill="#fff5dd"/>
+<ellipse cx="153" cy="132" rx="104" ry="80" fill="url(#gold)"/><g opacity=".8" fill="#d99c53"><circle cx="104" cy="83" r="14"/><circle cx="123" cy="67" r="13"/><circle cx="149" cy="64" r="14"/><circle cx="171" cy="70" r="13"/><circle cx="197" cy="85" r="15"/><circle cx="221" cy="112" r="13"/><circle cx="222" cy="147" r="13"/><circle cx="197" cy="179" r="14"/><circle cx="161" cy="194" r="13"/><circle cx="132" cy="182" r="14"/><circle cx="89" cy="163" r="14"/></g>
+<ellipse cx="92" cy="160" rx="58" ry="48" fill="url(#gold)"/><path d="M46 147Q30 179 53 190Q70 179 70 148" fill="#ad602c"/><path d="M121 143Q145 175 132 187Q110 182 106 150" fill="#ad602c"/><ellipse cx="90" cy="181" rx="24" ry="19" fill="#e0ae70"/><ellipse cx="90" cy="174" rx="8" ry="6" fill="#3c2826"/><path d="M62 162q11 8 22 0m18 0q12 9 21 0" fill="none" stroke="#5b3728" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="194" cy="188" rx="54" ry="37" fill="url(#coal)"/><path d="M152 177q-21 18-9 39l24-10m60-30q27 19 13 41l-25-8" fill="#292631"/><ellipse cx="190" cy="203" rx="25" ry="19" fill="#dfd7d0"/><ellipse cx="190" cy="195" rx="8" ry="6" fill="#25212b"/><path d="M166 189q9 6 17 0m13 0q10 7 19 0" fill="none" stroke="#25212b" stroke-width="3" stroke-linecap="round"/>
+<path d="M15 225Q75 196 138 222Q212 210 267 231" fill="none" stroke="#fffdf2" stroke-width="11" stroke-linecap="round"/>
+</svg>`:pokemonArt;
+ return `<div class="tcgBackup ${special||custom?'tcgTrophy':''}" aria-label="Illustrated card placeholder"><div class="backupHead"><span>${label}</span><span>${custom?'★ SECRET · HP 350':special?'★ TROPHY':'HP 100'}</span></div><div class="backupPhoto">${art}</div><div class="backupMoves"><span>✦ ${custom?'Giant Snooze':special?'Legendary Collector':'Pokémon Power'} &nbsp;&nbsp; ${custom?'150':'30'}</span><span>★ ${custom?'Dreamy Dog':special?'Ultra Rare':'Star Attack'} &nbsp;&nbsp; ${custom?'300':'80'}</span></div><div class="backupBottom">${custom?'Teddy and Hazel · Secret sleeping-dog duo · 0.2%':'Poké Pack Lab · Fan-made card illustration'}</div></div>`;
+}
+function artwork(c){
+ const key=cardKey(c);
+ // Safely stamp the exact art key onto each collectible display, so existing
+ // binder cards are updated as soon as their card images have loaded.
+ const src=tcgImages[key]||'';
+ if(c.id==='teddy-hazel'||c.id==='tederoni')return fullFallback(c);
+ const html=`<div class="artImageSlot" data-art-key="${safeText(key)}" style="width:100%;height:100%;position:relative">${fullFallback(c)}<img class="tcgCardImage" alt="Full Pokémon TCG card picture for ${safeText(cleanName(c))}" loading="lazy" decoding="async" ${src?`src="${src}"`:''}></div>`;
+ if(!src)queueImage(key);
+ return html;
+}
+function updateArt(key,url){
+ if(!url)return;
+ tcgImages[key]=url;
+ try {localStorage.setItem('poke_pack_lab_art_v1',JSON.stringify(tcgImages));}catch(e){}
+ document.querySelectorAll('.artImageSlot').forEach(slot=>{
+  if(slot.dataset.artKey!==key)return;
+  const img=slot.querySelector('.tcgCardImage');
+  if(!img||img.getAttribute('src')===url)return;
+  img.classList.remove('loaded');
+  img.src=url;
+ });
+}
+// Use delegation: loading new cards does not interfere with pack and binder buttons.
+document.addEventListener('load',event=>{
+ const e=event.target;
+ if(e&&e.classList&&e.classList.contains('tcgCardImage'))e.classList.add('loaded');
+},true);
+document.addEventListener('error',event=>{
+ const e=event.target;
+ if(e&&e.classList&&e.classList.contains('tcgCardImage')){
+  e.classList.remove('loaded');
+  e.removeAttribute('src');
+ }
+},true);
+async function fetchMatch(name,locale='en'){
+ const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),8500);
+ try{
+  const url='https://api.tcgdex.net/v2/'+locale+'/cards?name='+encodeURIComponent('eq:'+name);
+  const response=await fetch(url,{signal:controller.signal});
+  if(!response.ok)return null;
+  const all=await response.json();
+  if(!Array.isArray(all))return null;
+  // Results are all real card records; prefer a card with a complete scan.
+  const choices=all.filter(x=>x && typeof x.image==='string' && x.image.startsWith('https://assets.tcgdex.net/'));
+  // Normal cards: prefer recognizable modern/printed scans, keeping one
+  // stable selection for all repeated copies of the same species.
+  const chosen=choices.find(x=>x.name===name)||choices[0];
+  return chosen?chosen.image+'/high.webp':null;
+ }catch(e){return null}finally{clearTimeout(timer)}
+}
+async function findRealArt(key){
+ if(TCG_FIXED[key])return TCG_FIXED[key];
+ const candidates=SPECIAL_LOOKUPS[key]||[['en',key]];
+ for(const [locale,name] of candidates){
+  const image=await fetchMatch(name,locale);
+  if(image)return image;
+ }
+ return null;
+}
+function queueImage(key){
+ if((typeof navigator!=="undefined" && !navigator.onLine)||artRequests[key]||tcgImages[key])return;
+ artRequests[key]=findRealArt(key).then(url=>{if(url)updateArt(key,url)}).catch(()=>{});
+}
+// Load artwork for the complete card pool. This does not affect gameplay.
+function preloadCardArtwork(){
+ const keys=[...new Set([...COMMON,...RARES].map(x=>x[0]).concat(JACKPOTS.map(x=>x.id)))];
+ // Keep requests modest on an iPad. Four remote requests at a time.
+ let n=0;
+ async function worker(){while(n<keys.length){const key=keys[n++];queueImage(key);await artRequests[key];}}
+ for(let i=0;i<4;i++)worker();
+}
+const MONEY=n=>Math.round(n).toLocaleString('en-US');const $=x=>document.getElementById(x);
+const INITIAL=()=>({coins:500,cards:[],opened:0,lastDaily:'',music:false,sound:true,serial:0});
+let game;try{const raw=localStorage.getItem('poke_pack_lab_v2');game=raw?Object.assign(INITIAL(),JSON.parse(raw)):INITIAL()}catch(e){game=INITIAL()}
+for(const card of game.cards){if(card.id==='tederoni'||card.id==='teddy-hazel'){card.id='teddy-hazel';card.name=TEDERONI.name;card.value=TEDERONI.value;card.rarity='SECRET';}}
+let chosen=0,active='shop',audio=null,musicTimer=null,toastTimer=null;
+function persist(){try{localStorage.setItem('poke_pack_lab_v2',JSON.stringify(game))}catch(e){}}
+function say(s){$('toast').textContent=s;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2600)}
+function tab(v){active=v;document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==v));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===v));if(v==='binder')renderBinder();if(v==='shop')renderPacks()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.tab)));
+function renderTop(){$('coins').textContent=MONEY(game.coins);$('count').textContent=game.cards.length+' cards'}
+function renderPacks(){$('packs').innerHTML=PRICES.map((p,i)=>`<button class="pack ${i===chosen?'selected':''}" style="--h:${(i*25+184)%360}" data-pack="${i}" aria-label="Pack ${i+1}, ${TITLES[i]}, ${MONEY(p)} coins"><span class="packIcon">${ICONS[i]}</span><div class="packName">Pack ${i+1}<br>${TITLES[i]}</div><div class="packPrice">🪙 ${MONEY(p)}</div></button>`).join('');document.querySelectorAll('[data-pack]').forEach(x=>x.onclick=()=>{chosen=Number(x.dataset.pack);renderPacks()});const p=PRICES[chosen];$('detail').innerHTML=`<div class="muted small">PACK ${chosen+1} OF ${PRICES.length}</div><span class="bigpack">${ICONS[chosen]}</span><h2>${TITLES[chosen]} Pack</h2><div class="price">🪙 ${MONEY(p)}</div><p>${chosen===20?'One card from the entire game, including every rarity. Secret Teddy and Hazel: 0.2% chance.':'One surprise collectible card in each pack.'}</p><button class="btn gold full" id="openPack" ${game.coins<p?'disabled':''}>✨ Open Pack ${chosen+1}</button><div class="note">${chosen===20?'All existing card types and rarities can drop, plus Teddy and Hazel worth 5,000,000 coins. Secret chance: 0.2% (1 in 500).':chosen===19?'Seven ultra-rare featured cards. The top pull is Pikachu Illustrator at 0.5%.':chosen>14?'Higher pack numbers can have shinier cards.':'Open, collect, and trade in cards for coins.'}</div>${chosen===19||chosen===20?`<table class="probTable"><tr><th>Featured card</th><th>Demo chance</th></tr>${chosen===20?`<tr><td>Teddy and Hazel · SECRET · 🪙 5,000,000</td><td>${TEDERONI.chance}%</td></tr>`:''}${JACKPOTS.map(x=>`<tr><td>${x.name}</td><td>${x.chance}%</td></tr>`).join('')}</table>`:''}<button class="btn alt full" style="margin-top:12px" id="getCoins">Earn coins</button>`;$('openPack').onclick=openPack;$('getCoins').onclick=()=>tab('rewards');}
+function draw(){const i=chosen,p=PRICES[i],roll=Math.random()*100;if(i===20&&roll<TEDERONI.chance)return Object.assign({},TEDERONI);if(i===19||i===20){let cursor=i===20?TEDERONI.chance:0;for(const x of JACKPOTS){cursor+=x.chance;if(roll<cursor)return Object.assign({},x)}}const r=Math.random(),pick=r<0.18?RARES[Math.floor(Math.random()*RARES.length)]:COMMON[Math.floor(Math.random()*COMMON.length)];const rare=r<0.18;const mult=rare?1.05+Math.random()*.85:.40+Math.random()*.65;return{id:'pack'+i+'-'+pick[0].toLowerCase(),name:pick[0]+(rare?' · Holo':''),icon:pick[1],rarity:rare?'HOLO':'COMMON',value:Math.max(35,Math.round(p*mult/5)*5),color:rare?'#a38ffc':`hsl(${(i*24+156)%360} 45% 50%)`};}
+function cardHtml(c,results=false){const worth=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));return `<div class="card ${c.grade?'graded':''} ${results?'resultCard pull':''} ${c.locked?'cardLocked':''}" style="--c:${c.color}"><div class="topline"><span>${c.rarity}</span>${results?`<span class="stamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`:`<button class="lockToggle ${c.locked?'isLocked':''}" type="button" data-lock="${c.uid}" aria-label="${c.locked?'Unlock':'Lock'} ${safeText(c.name)}" aria-pressed="${c.locked?'true':'false'}">${c.locked?'🔒 Unlock':'🔓 Lock'}</button>`}</div>${results?'':`<span class="stamp cardStamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`}<div class="art">${artwork(c)}</div><div class="name">${c.name}</div><div class="val">🪙 ${MONEY(worth)}${results?' value':''}</div>${results?'':`<div class="commands"><button data-grade="${c.uid}" ${c.grade?'disabled':''}>${c.grade?'Graded':'Grade'}</button><button data-sell="${c.uid}" ${c.locked?'disabled aria-disabled="true" title="Unlock card before selling"':''}>${c.locked?'Locked':'Sell'}</button></div>`}</div>`;}
+function openPack(){const price=PRICES[chosen];if(game.coins<price){say('Not enough coins. Claim a reward first!');return;}game.coins-=price;game.opened++;const c=draw();game.serial++;c.uid=game.serial;game.cards.unshift(c);persist();renderTop();renderPacks();$('resultTitle').textContent=c.rarity==='SECRET'?'YOU FOUND TEDDY AND HAZEL!':c.rarity==='GRAIL'?'THE ULTIMATE PULL!':c.rarity==='JACKPOT'?'JACKPOT!':c.rarity==='TROPHY'?'TROPHY CARD!':c.rarity==='HOLO'?'HOLOGRAPHIC!':'You pulled a card!';$('resultCard').innerHTML=cardHtml(c,true);$('resultDesc').textContent=c.rarity==='SECRET'?'Teddy and Hazel! This secret card is worth 5,000,000 coins and has a 0.2% chance in Pack 21.':c.rarity==='GRAIL'?'A 0.5% pull! This is the rarest prize in Pack 20.':c.rarity==='JACKPOT'?'First Edition Holo Charizard: a 4.5% Pack 20 pull.':c.rarity==='TROPHY'?'One of the five added ultra-rare Pack 20 cards.':'Your new card has been added to the binder.';$('overlay').classList.remove('hidden');playEffect(['SECRET','GRAIL','JACKPOT','TROPHY'].includes(c.rarity));}
+$('closeResult').onclick=()=>$('overlay').classList.add('hidden');
+function gradeCost(c){return Math.max(50,Math.round(c.value*.08/10)*10)}
+function renderBinder(){renderTop();$('statCards').textContent=MONEY(game.cards.length);$('statPacks').textContent=MONEY(game.opened);$('statWorth').textContent=MONEY(game.cards.reduce((a,c)=>a+Math.round(c.value*(c.grade?(.35+c.grade*.22):1)),0));$('binderCards').innerHTML=game.cards.length?game.cards.map(c=>cardHtml(c)).join(''):'<div class="empty" style="grid-column:1/-1">Your binder is empty.<br>Open a pack to find your first card! 📕</div>';document.querySelectorAll('[data-lock]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.lock));if(!c)return;c.locked=!c.locked;persist();renderBinder();say(c.name+(c.locked?' locked. It cannot be sold.':' unlocked. You can sell it now.'))});document.querySelectorAll('[data-grade]').forEach(b=>b.onclick=()=>{const c=game.cards.find(c=>c.uid===Number(b.dataset.grade));if(!c)return;const cost=gradeCost(c);if(game.coins<cost){say('Grading costs '+MONEY(cost)+' coins. Earn more in Rewards.');return;}if(!confirm('Spend '+MONEY(cost)+' coins to grade '+c.name+'?'))return;game.coins-=cost;const r=Math.random();c.grade=r<.05?10:r<.16?9:r<.35?8:r<.57?7:r<.74?6:r<.87?5:Math.floor(Math.random()*4)+1;persist();renderBinder();say(c.name+' got Game Grade '+c.grade+'!');playEffect(c.grade>=9)});document.querySelectorAll('[data-sell]').forEach(b=>b.onclick=()=>{const idx=game.cards.findIndex(c=>c.uid===Number(b.dataset.sell));if(idx<0)return;const c=game.cards[idx];if(c.locked){say('Unlock '+c.name+' before selling.');return;}const value=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));if(!confirm('Sell '+c.name+' for '+MONEY(value)+' coins? This removes it from your binder.'))return;game.coins+=value;game.cards.splice(idx,1);persist();renderBinder();say('Sold for '+MONEY(value)+' coins')});}
+function today(){return new Date().toLocaleDateString('en-CA')}
+function rewards(){const claimed=game.lastDaily===today();$('daily').disabled=claimed;$('daily').textContent=claimed?'Claimed ✓':'Claim +500'}
+$('daily').onclick=()=>{if(game.lastDaily===today())return;game.lastDaily=today();game.coins+=500;persist();renderTop();rewards();say('Daily reward: +500 coins!');playEffect(false)};
+$('earn').onclick=()=>{game.coins+=100;persist();renderTop();say('Card box sorted! +100 coins');playEffect(false)};
+$('millionBonus').onclick=()=>{game.coins+=1000000;persist();renderTop();renderPacks();say('+1,000,000 coins added!');playEffect(true)};
+function renderSettings(){$('music').textContent=game.music?'⏸ Pause':'▶ Play';$('sounds').textContent=game.sound?'On':'Off'}
+function getAudio(){if(audio)return audio;const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;try{audio=new A()}catch(e){return null}return audio}
+function note(freq,t,dur,vol,type='sine'){const a=getAudio();if(!a)return;let o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,vol),t+.016);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.02)}
+function beat(t,strong){const a=getAudio();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type='sine';o.frequency.setValueAtTime(strong?120:72,t);o.frequency.exponentialRampToValueAtTime(strong?48:42,t+.11);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(strong?.085:.045,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.14);o.connect(g).connect(a.destination);o.start(t);o.stop(t+.15)}
+let bar=0;function musicBar(){if(!game.music)return;const a=getAudio();if(!a)return;const base=a.currentTime+.04,seq=[[261.63,311.13,392],[220,261.63,329.63],[174.61,220,261.63],[196,246.94,293.66]],chord=seq[bar%seq.length];chord.forEach((f,j)=>note(f/2,base+.08,1.8,.013,'triangle'));[0,.4,.8,1.2].forEach((off,k)=>{beat(base+off,k===0||k===2);if(k===1||k===3)note(760,base+off+.01,.035,.004,'triangle')});note(chord[0]/4,base, .6,.039,'triangle');note(chord[1],base+.62,.30,.018,'sine');note(chord[2],base+1.05,.27,.015,'sine');bar++}
+function musicStop(){if(musicTimer)clearInterval(musicTimer);musicTimer=null;game.music=false;persist();renderSettings()}
+function musicStart(){const a=getAudio();if(!a){say('This browser does not support music playback');return}a.resume().then(()=>{game.music=true;persist();renderSettings();if(musicTimer)clearInterval(musicTimer);musicBar();musicTimer=setInterval(musicBar,1600)}).catch(()=>say('Tap Play again to enable audio'))}
+$('music').onclick=()=>game.music?musicStop():musicStart();$('sounds').onclick=()=>{game.sound=!game.sound;persist();renderSettings()};
+function playEffect(win){if(!game.sound)return;const a=getAudio();if(!a)return;a.resume().then(()=>{let t=a.currentTime+.02;const tones=win?[523,659,784,1046]:[440,554,659];tones.forEach((n,i)=>note(n,t+i*(win?.12:.09),.28,.033,'triangle'))}).catch(()=>{})}
+$('reset').onclick=()=>{if(!confirm('Really erase your cards and start over with 500 coins?'))return;musicStop();game=INITIAL();persist();chosen=0;renderAll();tab('shop');say('Fresh game! You have 500 coins.')};
+function renderAll(){renderTop();renderPacks();renderBinder();rewards();renderSettings()}
+// Autoplay is blocked in most browsers, so music is always enabled by the player's deliberate tap.
+game.music=false;const warning=document.getElementById('previewWarning');if(warning)warning.remove();renderAll();preloadCardArtwork();
+window.addEventListener('online',preloadCardArtwork);
+let pendingInstall=null;
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();pendingInstall=event;});
+const installBtn=document.getElementById('installApp');
+if(installBtn)installBtn.addEventListener('click',async()=>{
+ if(pendingInstall){try{pendingInstall.prompt();await pendingInstall.userChoice;pendingInstall=null;}catch(e){say('Use your browser menu to install the app.')}return;}
+ say('Safari: Share → Add to Home Screen. Android: browser menu → Install app.');
+});
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+})();
+</script></body></html>
