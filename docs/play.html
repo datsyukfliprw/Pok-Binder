@@ -354,6 +354,20 @@ function preloadCardArtwork(){
  async function worker(){while(n<keys.length){const key=keys[n++];queueImage(key);await artRequests[key];}}
  for(let i=0;i<4;i++)worker();
 }
+// Keep opening several common cards from minting far more coins than a pack costs.
+// A 100-coin starter pack now has commons worth 3-8 coins each, even on a 10-card pull.
+const CARD_VALUE_BALANCE_VERSION=2;
+function newCardValue(price,rarity){
+ const range=rarity==='LEGENDARY'?[.65,1.30]:rarity==='HOLO'||rarity==='ULTRA'?[.12,.32]:[.03,.075];
+ return Math.max(1,Math.round(price*(range[0]+Math.random()*(range[1]-range[0]))));
+}
+function rebalanceOwnedCard(card){
+ // A one-time migration adjusts cards obtained before the value rebalance.
+ // Preserve collector specials, especially Teddy and Hazel's 5,000,000 coin value.
+ if(['SECRET','GRAIL','JACKPOT','TROPHY'].includes(card.rarity))return;
+ const ratio=card.rarity==='LEGENDARY'?.28:['HOLO','ULTRA'].includes(card.rarity)?.14:.075;
+ card.value=Math.max(1,Math.round((Number(card.value)||0)*ratio));
+}
 const PACK_CARD_ODDS=[{count:3,chance:50},{count:4,chance:15},{count:5,chance:30},{count:10,chance:5}];
 function packCardCount(){const roll=Math.random()*100;let cursor=0;for(const option of PACK_CARD_ODDS){cursor+=option.chance;if(roll<cursor)return option.count;}return 3;}
 const MONEY=n=>Math.round(n).toLocaleString('en-US');const $=x=>document.getElementById(x);
@@ -361,6 +375,11 @@ const INITIAL=()=>({coins:500,binderCoins:0,cards:[],opened:0,rebirths:0,lastDai
 let game;try{const raw=localStorage.getItem('poke_pack_lab_v2');game=raw?Object.assign(INITIAL(),JSON.parse(raw)):INITIAL()}catch(e){game=INITIAL()}
 if(!Number.isSafeInteger(game.binderCoins)||game.binderCoins<0)game.binderCoins=0;
 if(!Number.isInteger(game.rebirths)||game.rebirths<0||game.rebirths>50)game.rebirths=0;
+if(game.cardValueBalanceVersion!==CARD_VALUE_BALANCE_VERSION){
+ for(const card of game.cards)rebalanceOwnedCard(card);
+ game.cardValueBalanceVersion=CARD_VALUE_BALANCE_VERSION;
+ try{localStorage.setItem('poke_pack_lab_v2',JSON.stringify(game))}catch(e){}
+}
 for(const card of game.cards){if(card.id==='tederoni'||card.id==='teddy-hazel'){card.id='teddy-hazel';card.name=TEDERONI.name;card.value=TEDERONI.value;card.rarity='SECRET';}}
 let chosen=0,active='shop',audio=null,musicTimer=null,toastTimer=null;
 function persist(){try{localStorage.setItem('poke_pack_lab_v2',JSON.stringify(game))}catch(e){}}
@@ -420,7 +439,7 @@ function draw(){
  else if(r<legendChance+rareChance){rarity=(i>=28&&Math.random()<.4)?'ULTRA':'HOLO';pool=POKEMON_RARE;mult=1.1+Math.random()*1.1;color='#a38ffc';}
  else{rarity='COMMON';pool=POKEMON_COMMON;mult=.36+Math.random()*.68;color='hsl('+((i*24+156)%360)+' 45% 50%)';}
  const pokemonId=pool[Math.floor(Math.random()*pool.length)],name=POKEMON_NAMES[pokemonId-1];
- return {id:'dex-'+pokemonId,name,pokemonId,icon:rarity==='LEGENDARY'?'🌟':rarity==='COMMON'?'✦':'✨',rarity,value:Math.max(35,Math.round(p*mult/5)*5),color};
+ return {id:'dex-'+pokemonId,name,pokemonId,icon:rarity==='LEGENDARY'?'🌟':rarity==='COMMON'?'✦':'✨',rarity,value:newCardValue(p,rarity),color};
 }
 function cardHtml(c,results=false){const worth=Math.round(c.value*(c.grade?(.35+c.grade*.22):1));return `<div class="card ${c.grade?'graded':''} ${results?'resultCard pull':''} ${c.locked?'cardLocked':''}" style="--c:${c.color}"><div class="topline"><span>${c.rarity}</span>${results?`<span class="stamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`:`<button class="lockToggle ${c.locked?'isLocked':''}" type="button" data-lock="${c.uid}" aria-label="${c.locked?'Unlock':'Lock'} ${safeText(c.name)}" aria-pressed="${c.locked?'true':'false'}">${c.locked?'🔒 Unlock':'🔓 Lock'}</button>`}</div>${results?'':`<span class="stamp cardStamp">${c.grade?'GAME GRADE '+c.grade:'✦ COLLECTION'}</span>`}<div class="art">${artwork(c)}</div><div class="name">${c.name}</div><div class="val">🪙 ${MONEY(worth)}${results?' value':''}</div>${results?'':`<div class="commands"><button data-grade="${c.uid}" ${c.grade?'disabled':''}>${c.grade?'Graded':'Grade'}</button><button data-sell="${c.uid}" ${c.locked?'disabled aria-disabled="true" title="Unlock card before selling"':''}>${c.locked?'Locked':'Sell'}</button></div>`}</div>`;}
 function openPack(){
